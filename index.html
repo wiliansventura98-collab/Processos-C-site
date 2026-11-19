@@ -1277,6 +1277,46 @@ h1{font:800 32px/1.1 var(--display);letter-spacing:-.025em}
 
 .side-foot em{font-style:normal}
 @media (max-width:920px){.brand>div{display:none}.side-foot em{display:none}.side-foot{gap:0}.stat{padding:14px;gap:10px}.stat .ico{width:38px;height:38px}.cd{width:96px;height:96px;border-radius:22px}.cd b{font-size:40px}.next-main{gap:14px}.next .what{font-size:18px}}
+
+/* jornada didática */
+.duo{grid-template-columns:1fr}
+.jor .seg{border-radius:10px}
+.jor .seg button{padding:7px 14px;font-size:13px}
+.jor .seg button.on{background:var(--ink);color:#fff}
+.jr-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--ink2);margin:-2px 0 8px;align-items:center}
+.jr-legend .lg{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;margin-right:6px;vertical-align:-3px;font-style:normal;font-size:9px;font-weight:800}
+.lg.lg-done{background:#16a34a;color:#fff}.lg.lg-now{background:var(--danger)}.lg.lg-next{background:#fff;border:2px solid var(--ink)}.lg.lg-todo{background:#fff;border:2px dashed var(--line2)}
+.jr{padding:16px 0 6px;border-top:1px solid var(--line)}
+.jr:first-of-type{border-top:0}
+.jr-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;cursor:pointer;margin-bottom:14px}
+.jr-h i{width:10px;height:10px;border-radius:3px;background:var(--cc)}
+.jr-h b{font:700 15px var(--display)}
+.jr-now{font-size:12.5px;color:var(--ink2);background:var(--surface2);border:1px solid var(--line);padding:3px 10px;border-radius:999px}
+.jr-now strong{color:var(--ink)}
+.jr-pct{margin-left:auto;font-size:12px;color:var(--ink3);font-weight:600}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(var(--n),minmax(112px,1fr));position:relative;overflow-x:auto;padding-bottom:6px}
+.steps::before,.steps::after{content:"";position:absolute;top:17px;left:calc(50% / var(--n));height:4px;border-radius:4px}
+.steps::before{right:calc(50% / var(--n));background:var(--line)}
+.steps::after{width:calc((100% - 100% / var(--n)) * var(--pf));background:linear-gradient(90deg,#16a34a,var(--cc));transition:width .8s}
+#main.enter .steps::after{animation:grow 1s cubic-bezier(.2,.7,.2,1) both .3s}
+@keyframes grow{from{width:0}}
+.st{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;padding:0 6px;cursor:pointer}
+.st-dot{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font:800 14px var(--display);background:#fff;border:2px dashed var(--line2);color:var(--ink3);transition:transform .15s}
+.st:hover .st-dot{transform:scale(1.08)}
+.st.s-done .st-dot{background:#16a34a;border:0;color:#fff;font-size:16px}
+.st.s-next .st-dot{border:2.5px solid var(--ink);color:var(--ink)}
+.st.s-now .st-dot{border:0;color:#fff;background:var(--danger);box-shadow:0 0 0 0 rgba(220,38,38,.5);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(220,38,38,.45)}70%{box-shadow:0 0 0 12px rgba(220,38,38,0)}100%{box-shadow:0 0 0 0 rgba(220,38,38,0)}}
+.st-l{font:700 13px/1.25 var(--display);margin-top:6px;color:var(--ink)}
+.st.s-done .st-l{color:var(--ink2)}
+.st-d{font-size:12px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.st-s{font-size:11.5px;font-weight:700;color:var(--ink3)}
+.st.s-now .st-s{color:var(--danger)}
+.st.s-next .st-s{color:var(--ink)}
+.st.s-done .st-s{color:#16a34a;font-weight:600}
+.st[data-tip]:hover::after{bottom:auto;top:-34px;white-space:normal;width:max-content;max-width:240px}
+@media (max-width:640px){.steps{grid-template-columns:repeat(var(--n),112px)}.jr-pct{margin-left:0}}
+@media (prefers-reduced-motion:reduce){.st.s-now .st-dot{animation:none}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 </head>
@@ -1581,7 +1621,7 @@ function renderAlertas(){
 }
 function ring(pct,size,stroke,color){ const r=(size-stroke)/2, c=2*Math.PI*r, v=Math.max(0,Math.min(100,pct||0));
   return `<svg class="ring" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--line)" stroke-width="${stroke}"/><circle class="ring-v" cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${(c*(1-v/100)).toFixed(1)}" transform="rotate(-90 ${size/2} ${size/2})" style="--c:${c.toFixed(1)}"/></svg>` }
-function renderTimeline(ativos){
+function renderGantt(ativos){
   const t=today(), start=new Date(t); start.setDate(start.getDate()-14); const end=new Date(t); end.setDate(end.getDate()+150);
   const span=end-start, pos=d=>Math.max(0,Math.min(100,(d-start)/span*100));
   const lanes=ativos.map(c=>({c,evs:sortedEvents(c).filter(e=>{ const a=pd(e.inicio), b=pd(e.fim)||a; return b>=start&&a<=end })})).filter(l=>l.evs.length)
@@ -1596,9 +1636,47 @@ function renderTimeline(ativos){
       return `<span class="tl-pt ${e.tipo==='prova'?'prova':''} ${past?'past':''} ${e.feito?'done':''}" style="left:${pos(a)}%;--k:${T.c}" data-open="${esc(c.id)}" data-tip="${tip}"></span>` }).join('');
     return `<div class="tl-row"><div class="tl-name" data-open="${esc(c.id)}"><i style="background:${esc(c.cor||'var(--accent)')}"></i><span>${esc(c.nome)}</span></div><div class="tl-track">${marks}</div></div>` }).join('');
   const legend=TIPOS.filter(x=>['inscricao','isencao','pagamento','titulos','prova','resultado'].includes(x.k)).map(x=>`<span><i style="background:${x.c}"></i>${x.l}</span>`).join('')+'<span><i class="lg-today"></i>hoje</span>';
-  return `<section class="card tl"><div class="sec-h"><div><h3>Linha do tempo</h3><span class="muted">Próximos 5 meses · passe o mouse ou toque para ver cada prazo</span></div><div class="tl-legend">${legend}</div></div>
+  return `<div class="tl-legend" style="margin-bottom:10px">${legend}</div>
     <div class="tl-body"><div class="tl-row tl-axis"><div></div><div class="tl-track">${ticks}</div></div>${rows}
-    <div class="tl-row tl-overlay"><div></div><div class="tl-track"><span class="tl-todayline" style="left:${pos(t)}%"></span></div></div></div></section>`;
+    <div class="tl-row tl-overlay"><div></div><div class="tl-track"><span class="tl-todayline" style="left:${pos(t)}%"></span></div></div></div>`;
+}
+const FASES=[{k:'isencao',l:'Isenção da taxa',ic:'％'},{k:'inscricao',l:'Inscrição',ic:'✎'},{k:'pagamento',l:'Pagamento',ic:'$'},{k:'titulos',l:'Títulos e documentos',ic:'▤'},{k:'prova',l:'Prova',ic:'✦'},{k:'resultado',l:'Resultado final',ic:'★'}];
+const FASE_DICA={isencao:'Pedir para não pagar (ou pagar menos) a taxa.',inscricao:'Período para se inscrever no site da banca.',pagamento:'Último dia para pagar o boleto.',titulos:'Envio de diplomas, comprovantes ou vídeo.',prova:'Dia da prova.',resultado:'Classificação final publicada.'};
+function jornada(c){
+  const ev=sortedEvents(c), out=[];
+  FASES.forEach(f=>{ const xs=ev.filter(e=>e.tipo===f.k); if(!xs.length) return;
+    let e; if(f.k==='resultado') e=xs[xs.length-1];
+    else e=xs.slice().sort((x,y)=>((pd(y.fim)||pd(y.inicio))-pd(y.inicio))-((pd(x.fim)||pd(x.inicio))-pd(x.inicio)))[0];
+    out.push({f,e}) });
+  out.sort((x,y)=>x.e.inicio.localeCompare(y.e.inicio));
+  let curSet=false;
+  out.forEach(x=>{ const s=evState(x.e); x.st = x.e.feito||s==='past' ? 'done' : s==='now' ? 'now' : 'todo'; });
+  const firstOpen=out.findIndex(x=>x.st!=='done'); if(firstOpen>=0 && out[firstOpen].st==='todo') out[firstOpen].st='next';
+  return out;
+}
+function stepTxt(x){ const e=x.e; if(x.st==='done') return 'concluída';
+  if(x.st==='now'){ const n=diff(pd(e.fim||e.inicio)); return n===0?'último dia hoje':n===1?'termina amanhã':'termina em '+n+' dias' }
+  const n=diff(pd(e.inicio)); return n===0?'hoje':n===1?'amanhã':'em '+n+' dias' }
+function renderTimeline(ativos){
+  const rows=ativos.map(c=>({c,j:jornada(c)})).filter(r=>r.j.length && r.j.some(x=>x.st!=='done'))
+    .sort((x,y)=>{ const a=x.j.find(s=>s.st!=='done'), b=y.j.find(s=>s.st!=='done'); return (a?a.e.inicio:'9').localeCompare(b?b.e.inicio:'9') });
+  if(!rows.length) return '';
+  const mode=window._tlMode||'etapas';
+  const body = mode==='calendario' ? renderGantt(ativos) : rows.map(({c,j})=>{
+    const doneN=j.filter(x=>x.st==='done').length; let li=-1; j.forEach((x,k)=>{ if(x.st==='done'||x.st==='now') li=k }); const pct=j.length>1?Math.round(100*Math.max(0,li)/(j.length-1)):0;
+    const cur=j.find(x=>x.st==='now')||j.find(x=>x.st==='next');
+    const steps=j.map((x,i)=>`<li class="st s-${x.st}" style="--k:${tp(x.e.tipo).c}" data-open="${esc(c.id)}" data-tip="${esc(x.e.titulo)}">
+        <span class="st-dot">${x.st==='done'?'✓':i+1}</span>
+        <span class="st-l">${esc(x.f.l)}</span>
+        <span class="st-d">${fd(x.e.inicio,false)}${x.e.fim&&x.e.fim!==x.e.inicio?' – '+fd(x.e.fim,false):''}</span>
+        <span class="st-s">${stepTxt(x)}</span></li>`).join('');
+    return `<div class="jr" style="--cc:${esc(c.cor||'var(--accent)')}">
+      <div class="jr-h" data-open="${esc(c.id)}"><i></i><b>${esc(c.nome)}</b>${cur?`<span class="jr-now">${cur.st==='now'?'Agora':'Próxima etapa'}: <strong>${esc(cur.f.l)}</strong> · ${stepTxt(cur)}</span>`:''}<span class="jr-pct">${doneN} de ${j.length} etapas concluídas</span></div>
+      <ol class="steps" style="--n:${j.length};--pf:${pct/100}">${steps}</ol></div>` }).join('');
+  return `<section class="card tl jor"><div class="sec-h"><div><h3>Linha do tempo dos concursos</h3><span class="muted">${mode==='calendario'?'Todos os prazos no calendário dos próximos 5 meses':'Cada linha mostra as etapas de um concurso, na ordem em que acontecem'}</span></div>
+    <div class="seg" role="tablist"><button class="${mode==='etapas'?'on':''}" data-tlmode="etapas">Etapas</button><button class="${mode==='calendario'?'on':''}" data-tlmode="calendario">Calendário</button></div></div>
+    ${mode==='etapas'?`<div class="jr-legend"><span><i class="lg lg-done">✓</i>Etapa concluída</span><span><i class="lg lg-now"></i>Acontecendo agora</span><span><i class="lg lg-next"></i>Próxima etapa</span><span><i class="lg lg-todo"></i>Etapa futura</span><span class="muted">Clique numa etapa para abrir o concurso.</span></div>`:''}
+    ${body}</section>`;
 }
 function renderPainel(){
   if(!items.length) return `<div class="card empty"><h3>Nenhum concurso ainda</h3><p>Adicione o primeiro edital que você está acompanhando.</p><button class="btn primary" data-act="add">＋ Adicionar concurso</button></div>`;
@@ -1643,7 +1721,7 @@ function renderPainel(){
   const toolbar = `<div class="toolbar"><div class="sec-t"><h3>Seus concursos</h3><div class="chips">${chips}</div></div>
     <select class="sel" id="sortSel"><option value="proximo">Ordenar: próximo prazo</option><option value="prioridade">Prioridade</option><option value="salario">Salário</option><option value="nome">Nome</option></select></div>`;
   const cards = list.map((c,i)=>card(c,i)).join('') || '<div class="muted" style="padding:20px">Nenhum concurso neste filtro.</div>';
-  return `<section class="hero">${hero}${stats}</section><div class="duo">${renderTimeline(ativos)}${renderAlertas()}</div>${toolbar}<section class="grid">${cards}</section>`;
+  return `<section class="hero">${hero}${stats}</section><div class="duo">${renderAlertas()}${renderTimeline(ativos)}</div>${toolbar}<section class="grid">${cards}</section>`;
 }
 
 function card(c,i){
@@ -2265,6 +2343,7 @@ document.addEventListener('click',e=>{
   const ml=e.target.closest('[data-mloc]'); if(ml){ const [cid,i]=ml.dataset.mloc.split('|'); mapSel={cid,i:+i}; const c=items.find(x=>x.id===cid); if(c) focusLocal(c,+i,ml.classList.contains('minerow')); render(); return }
   const mo=e.target.closest('[data-mopen]'); if(mo){ openDrawer(mo.dataset.mopen); return }
   const md=e.target.closest('[data-mdel]'); if(md){ const [cid,i]=md.dataset.mdel.split('|'); const c=items.find(x=>x.id===cid); if(c){ const n=clone(c); n.locais.splice(+i,1); mapSel=null; saveItem(n); toast('Local removido') } return }
+  const tm=e.target.closest('[data-tlmode]'); if(tm){ window._tlMode=tm.dataset.tlmode; render(); return }
   const cs=e.target.closest('[data-csel]'); if(cs){ contSel=cs.dataset.csel; render(); return }
   const bk=e.target.closest('[data-blk]'); if(bk){ const k=bk.dataset.blk; openBlocks.has(k)?openBlocks.delete(k):openBlocks.add(k); render(); return }
   const ce=e.target.closest('[data-cedit]'); if(ce){ openContEditor(); return }
