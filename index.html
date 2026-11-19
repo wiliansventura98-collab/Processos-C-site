@@ -1311,7 +1311,13 @@ function openGate(force){
     const cfg={token:layer.querySelector('#gTok').value.trim(),owner:layer.querySelector('#gOwn').value.trim(),repo:layer.querySelector('#gRep').value.trim(),branch:layer.querySelector('#gBr').value.trim()||'main',path:layer.querySelector('#gPath').value.trim()||'data/concursos.json'};
     const err=layer.querySelector('#gErr'); if(!cfg.token){ err.textContent='Cole a chave de acesso.'; return }
     err.textContent='Verificando…';
-    try{ const r=await ghReq(cfg,cfg.path); if(r.status===401) throw new Error('Chave inválida ou expirada.'); if(r.status===404) throw new Error('Arquivo ou repositório não encontrado. Confira se a chave dá acesso ao Processos-C.'); if(!r.ok) throw new Error('Erro '+r.status+' do GitHub.');
+    cfg.token=cfg.token.replace(/^(bearer|token)\s+/i,'').replace(/\s+/g,'');
+    try{ let r; try{ r=await ghReq(cfg,cfg.path) }catch(netErr){ throw new Error('Não consegui falar com o GitHub (rede ou bloqueador de anúncios). Detalhe: '+netErr.message) }
+      let gm=''; if(!r.ok){ try{ gm=(await r.clone().json()).message||'' }catch(e){} }
+      if(r.status===401) throw new Error('Erro 401: chave inválida ou expirada. Gere uma nova e cole de novo, sem espaços. '+gm);
+      if(r.status===403) throw new Error('Erro 403: a chave não tem permissão. Em Permissions → Contents, escolha "Read and write". '+gm);
+      if(r.status===404) throw new Error('Erro 404: a chave não enxerga o repositório Processos-C ou o arquivo '+cfg.path+'. Em "Repository access", escolha "Only select repositories" e marque Processos-C. '+gm);
+      if(!r.ok) throw new Error('Erro '+r.status+' do GitHub. '+gm);
       localStorage.setItem(GHKEY,JSON.stringify(cfg)); localStorage.removeItem(LKEY+'-ghcache'); location.reload() }
     catch(e){ err.textContent=e.message } };
 }
