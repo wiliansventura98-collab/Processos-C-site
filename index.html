@@ -1,0 +1,2083 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Processos-C · Meus Concursos</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ee; --surface:#ffffff; --surface2:#faf9f6; --ink:#1c1d1f; --ink2:#55585e; --ink3:#8a8d93;
+  --line:#e4e1d9; --line2:#d3cfc4; --accent:#0e6e78; --accent-ink:#ffffff; --accent-soft:#e2f0f0;
+  --danger:#b4382c; --ok:#2f7d4a; --warn:#b06a10;
+  --r:14px; --shadow:0 1px 2px rgba(0,0,0,.04),0 6px 20px -12px rgba(0,0,0,.18);
+  --serif:'Fraunces',Georgia,serif; --sans:'Instrument Sans',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#141516;--surface:#1d1e20;--surface2:#232427;--ink:#ecebe7;--ink2:#b3b3ad;--ink3:#7f807c;
+  --line:#2f3033;--line2:#3d3e42;--accent:#3fb3bd;--accent-ink:#0c1b1d;--accent-soft:#1d3335;
+  --danger:#e0695c;--ok:#5cbf7d;--warn:#e3a14a;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.6)}
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--accent)}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 22px 80px}
+header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+h1{font-family:var(--serif);font-weight:650;font-size:34px;letter-spacing:-.02em;margin:0;line-height:1.05}
+.sub{color:var(--ink2);margin-top:6px;font-size:14px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line2);background:var(--surface);padding:9px 14px;border-radius:10px;cursor:pointer;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:7px;transition:.15s}
+.btn:hover{border-color:var(--ink3)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.ghost{background:transparent;border-color:transparent}
+.btn.ghost:hover{background:var(--surface2)}
+.btn.danger{color:var(--danger)}
+.btn.sm{padding:6px 10px;font-size:13px;border-radius:8px}
+.tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);padding:4px;border-radius:12px;width:max-content;margin-bottom:20px}
+.tab{border:0;background:transparent;padding:8px 16px;border-radius:9px;cursor:pointer;font-weight:600;color:var(--ink2);font-size:14px}
+.tab.on{background:var(--ink);color:var(--bg)}
+.sync{font-size:12.5px;color:var(--ink2);align-self:center;white-space:nowrap}
+.gate{max-width:560px}
+.gate ol{margin:8px 0 0;padding-left:20px;font-size:13.5px;line-height:1.55}
+.gate label{display:block;font-size:12.5px;font-weight:600;margin:12px 0 4px}
+.gate input{width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid var(--line2);border-radius:8px;font:inherit;background:var(--surface);color:var(--ink)}
+.gate .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gate .err{color:#c8372d;font-size:13px;margin-top:8px;min-height:18px}
+.banner{background:var(--surface);border:1px dashed var(--line2);border-radius:12px;padding:10px 14px;color:var(--ink2);font-size:13px;margin-bottom:16px}
+.dtabs{display:flex;gap:4px;margin-top:16px;border-bottom:1px solid var(--line);margin-bottom:-1px;flex-wrap:wrap}
+.dtabs button{border:0;background:none;padding:9px 12px;font:600 13.5px var(--sans);color:var(--ink2);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1px}
+.dtabs button.on{color:var(--ink);border-bottom-color:var(--accent)}
+.dtabs small{font-weight:600;color:var(--ink3);margin-left:3px}
+.rsheet{padding:18px 20px}
+.rs-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:6px}
+.rs-act{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden}
+.seg button{border:0;background:var(--surface);padding:6px 10px;font:600 12.5px var(--sans);color:var(--ink2);cursor:pointer}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.rs-g{margin:22px 0 4px;font-size:11.5px;text-transform:uppercase;letter-spacing:.09em;font-weight:700;color:var(--ink3)}
+.rs-m{border:1px solid var(--line);border-radius:12px;margin-top:10px;overflow:hidden}
+.rs-mh{display:flex;gap:10px;align-items:center;padding:11px 14px;background:var(--surface2,rgba(0,0,0,.025));border-bottom:1px solid var(--line)}
+.rs-mh b{flex:1;font-size:14.5px}
+.rs-n{width:24px;height:24px;border-radius:7px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font:700 12px var(--sans);flex:none}
+.rs-t{padding:11px 14px;border-top:1px dashed var(--line)}
+.rs-t:first-of-type{border-top:0}
+.rs-th{display:flex;gap:9px;align-items:flex-start;cursor:pointer;font-size:14px;line-height:1.45}
+.rs-th input{width:auto;margin-top:3px}
+.rs-tn{font:700 12px var(--sans);color:var(--accent);min-width:30px;margin-top:2px}
+.rs-t.done .rs-th>span:last-child{color:var(--ink3);text-decoration:line-through;text-decoration-color:var(--line2)}
+.rs-refs{margin:8px 0 2px 64px;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px}
+.rs-refs li,.bib li{font-size:13px;line-height:1.45;color:var(--ink2);display:flex;gap:8px;align-items:baseline}
+.rs-refs a,.bib a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line2);text-underline-offset:2px}
+.rs-none{margin:6px 0 0 64px;font-size:12.5px;color:var(--ink3);font-style:italic}
+.rtag{flex:none;font:700 10px var(--sans);text-transform:uppercase;letter-spacing:.06em;padding:2px 6px;border-radius:5px}
+.rtag.ed{background:rgba(14,110,120,.12);color:#0b5e66}
+.rtag.sg{background:rgba(232,161,0,.15);color:#8a5d00}
+.bib{list-style:none;padding:0;margin:6px 0 0;display:flex;flex-direction:column;gap:10px}
+.bib-w{font-size:11.5px;color:var(--ink3);margin-top:2px}
+.bib-top{margin:12px 0 4px;padding:12px 14px;border-radius:10px;background:rgba(14,110,120,.06);font-size:13px;display:flex;flex-direction:column;gap:5px}
+.bib-top>b{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3)}
+.bib-top div{display:flex;justify-content:space-between;gap:10px}.bib-top small{color:var(--accent);font-weight:700;flex:none}
+@media (max-width:600px){.rs-refs,.rs-none{margin-left:0}}
+.qnote{margin:10px 0 4px;font-size:13px;color:var(--ink2);background:rgba(232,161,0,.08);border-radius:9px;padding:10px 12px}
+.qprov{margin:14px 0 6px;border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:9px}
+.qprov>b{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3)}
+.qp{display:flex;gap:8px;align-items:baseline;font-size:13px}.qp a{color:var(--ink)}
+.qstats{margin:12px 0 4px;display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.qstats>div{display:grid;grid-template-columns:1fr 120px 36px;gap:8px;align-items:center}
+.qcard{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:12px}
+.qcard.qok{border-color:rgba(47,143,85,.45)}.qcard.qerr{border-color:rgba(192,57,43,.4)}
+.qhead{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px}
+.qn{width:24px;height:24px;border-radius:7px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-weight:700;flex:none}
+.qmat{color:var(--ink2);font-weight:600}.qest{color:var(--ink3);margin-left:auto}
+.qredo{border:0;background:none;color:var(--accent);font:600 12px var(--sans);cursor:pointer}
+.qtop{font-size:12px;color:var(--ink3);margin-top:6px;font-style:italic}
+.qen{font-size:14.5px;line-height:1.55;margin:10px 0}
+.qalts,.qce{display:flex;flex-direction:column;gap:6px}.qce{flex-direction:row}
+.qalt{display:flex;gap:10px;align-items:flex-start;text-align:left;border:1px solid var(--line2);background:var(--surface);border-radius:9px;padding:9px 11px;font:14px/1.45 var(--sans);color:var(--ink);cursor:pointer}
+.qce .qalt{flex:1;justify-content:center}
+.qalt:hover:not([disabled]){border-color:var(--accent);background:rgba(14,110,120,.04)}
+.qalt b{flex:none;width:22px;height:22px;border-radius:50%;border:1px solid var(--line2);display:grid;place-items:center;font-size:12px}
+.qalt[disabled]{cursor:default;opacity:.75}
+.qalt.ok{border-color:#2f8f55;background:rgba(47,143,85,.1);opacity:1}.qalt.ok b{background:#2f8f55;color:#fff;border-color:#2f8f55}
+.qalt.bad{border-color:#c0392b;background:rgba(192,57,43,.08);opacity:1}.qalt.bad b{background:#c0392b;color:#fff;border-color:#c0392b}
+.qfb{margin-top:10px;font-size:13.5px;line-height:1.5;padding:10px 12px;border-radius:9px}
+.qfb.ok{background:rgba(47,143,85,.08)}.qfb.bad{background:rgba(192,57,43,.06)}
+.qta{min-height:90px}
+.qdet{margin-top:8px}.qdet summary{cursor:pointer;font:600 13px var(--sans);color:var(--accent)}
+.qrot{margin:10px 0 0;padding-left:20px;font-size:13.5px;line-height:1.5;display:flex;flex-direction:column;gap:4px}
+.qfb.neu{background:rgba(14,110,120,.06)}
+.qres{font-weight:800;margin-bottom:8px}
+.qgab,.qexp{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:baseline;margin-bottom:8px}
+.qgab span,.qexp span{font:700 10.5px var(--sans);text-transform:uppercase;letter-spacing:.07em;color:var(--ink3)}
+.qgab b{font-size:14px}.qexp p{margin:0}
+.qver{margin-top:10px;border:0;background:none;color:var(--accent);font:600 13px var(--sans);cursor:pointer;padding:0}
+.qmod{margin:10px 0;padding:12px 14px;border-radius:9px;background:rgba(14,110,120,.06);font-size:13.5px;line-height:1.6}
+.qmod p{margin:6px 0 0}.qsub{display:block;margin-top:10px;font-size:12.5px}
+@media (max-width:600px){.qgab,.qexp{grid-template-columns:1fr;gap:2px}}
+.rp{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:12px}
+.rp-h{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.rp-h b{font-size:14px}
+.rp-l{font-size:13px;margin:6px 0 2px}.rp-l a{color:var(--ink)}
+.rtab{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
+.rtab th{text-align:left;font:700 10.5px var(--sans);text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);padding:6px 6px;border-bottom:1px solid var(--line)}
+.rtab td{padding:6px;border-bottom:1px dashed var(--line);vertical-align:top}
+.rtab tr.rok td{background:rgba(47,143,85,.06)}.rtab tr.rerr td{background:rgba(192,57,43,.05)}
+.gh{color:var(--ink3)}
+.rres{white-space:nowrap}.rres button{border:1px solid var(--line2);background:var(--surface);border-radius:6px;width:26px;height:24px;cursor:pointer;font-weight:700;color:var(--ink3);margin-right:3px}
+.rres button.on{background:#2f8f55;color:#fff;border-color:#2f8f55}.rres button.on.bad{background:#c0392b;border-color:#c0392b}
+.qsrc{font-size:12.5px;margin-top:6px}.qsrc a{color:var(--accent)}
+/* alertas */
+.alerts{padding:16px 18px;margin-bottom:22px}
+.ahead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}.ahead h3{margin:0;font-family:var(--serif);font-size:20px}.ahead .muted{font-size:13px}
+.arow{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border-radius:8px;cursor:pointer;font-size:14px;margin-top:4px}
+.arow:hover{background:var(--line)}
+.arow .adot{width:10px;height:10px;border-radius:50%;margin-top:5px;flex:none}
+.arow.crit .adot{background:#c0392b}.arow.warn .adot{background:#e8a100}.arow.info .adot{background:#0e6e78}
+.arow.crit{background:rgba(192,57,43,.07)}
+.arow .amsg{color:var(--ink2);font-size:13px;margin-top:2px}.arow.crit .amsg{color:#a5281b;font-weight:600}
+/* hero */
+.hero{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:22px}
+@media (max-width:820px){.hero{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.next{padding:22px 24px;position:relative;overflow:hidden}
+.next .lbl{font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink3);font-weight:700}
+.next .big{font-family:var(--serif);font-size:44px;font-weight:650;letter-spacing:-.03em;line-height:1;margin:12px 0 8px}
+.next .what{font-size:17px;font-weight:600}
+.next .who{color:var(--ink2);font-size:14px;margin-top:2px}
+.next .bar{position:absolute;left:0;top:0;bottom:0;width:5px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat{padding:16px 18px}
+.stat .n{font-family:var(--serif);font-size:30px;font-weight:650;letter-spacing:-.02em;line-height:1}
+.stat .t{color:var(--ink2);font-size:13px;margin-top:6px}
+/* toolbar */
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line2);background:transparent;border-radius:999px;padding:5px 12px;font-size:13px;cursor:pointer;color:var(--ink2);font-weight:500}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sel{border:1px solid var(--line2);background:var(--surface);border-radius:9px;padding:7px 10px;font-size:13px}
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+.cc{padding:18px 18px 16px;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s;display:flex;flex-direction:column;gap:12px}
+.cc:hover{transform:translateY(-2px)}
+.cc .stripe{position:absolute;left:18px;right:18px;top:0;height:3px;border-radius:0 0 3px 3px}
+.cc h3{margin:0;font-family:var(--serif);font-size:21px;font-weight:650;letter-spacing:-.01em;line-height:1.15}
+.cc .role{color:var(--ink2);font-size:13.5px;margin-top:3px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--surface2);border:1px solid var(--line);white-space:nowrap}
+.pill .dot{width:7px;height:7px;border-radius:50%}
+.kv{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kv div{background:var(--surface2);border-radius:10px;padding:8px 10px}
+.kv b{display:block;font-size:15px}
+.kv span{font-size:11.5px;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.nextline{font-size:13.5px;color:var(--ink2);display:flex;gap:8px;align-items:baseline}
+.nextline strong{color:var(--ink)}
+.prog{height:6px;background:var(--surface2);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.prog i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.muted{color:var(--ink3);font-size:12.5px}
+.empty{padding:50px 24px;text-align:center}
+.empty h3{font-family:var(--serif);font-size:24px;margin:0 0 8px}
+.empty p{color:var(--ink2);max-width:460px;margin:0 auto 18px}
+/* agenda */
+.agenda{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;align-items:start}
+@media (max-width:900px){.agenda{grid-template-columns:1fr}}
+.cal{padding:16px}
+.calhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.calhead h3{margin:0;font-family:var(--serif);font-size:22px}
+.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.dow{font-size:11px;text-transform:uppercase;color:var(--ink3);font-weight:700;text-align:center;padding:4px 0}
+.day{min-height:78px;border-radius:9px;background:var(--surface2);padding:5px 6px;font-size:12px;display:flex;flex-direction:column;gap:3px;overflow:hidden}
+.day.out{opacity:.35}
+.day.today{outline:2px solid var(--accent)}
+.day .dn{font-weight:700;color:var(--ink2)}
+.ev{font-size:11px;padding:2px 5px;border-radius:5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;font-weight:600}
+.ev.done{opacity:.45;text-decoration:line-through}
+.list{padding:8px 0}
+.lgroup{padding:10px 18px 4px;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);font-weight:700}
+.litem{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:10px 18px;border-top:1px solid var(--line);cursor:pointer}
+.litem:hover{background:var(--surface2)}
+.litem .d{font-family:var(--serif);font-size:22px;font-weight:650;line-height:1}
+.litem .d small{display:block;font-family:var(--sans);font-size:11px;color:var(--ink3);font-weight:600;text-transform:uppercase}
+.litem .w{font-weight:600;font-size:14px}
+.litem .c{font-size:12.5px;color:var(--ink2);display:flex;gap:6px;align-items:center}
+.cd{font-size:12.5px;font-weight:700;white-space:nowrap}
+/* compare */
+.tablewrap{overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);font-weight:700;background:var(--surface2);position:sticky;top:0}
+tr.click{cursor:pointer}
+tr.click:hover td{background:var(--surface2)}
+/* conteúdo */
+.cpick{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.cpick button{border:1px solid var(--line2);background:var(--surface);border-radius:12px;padding:9px 14px;cursor:pointer;display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px}
+.cpick button.on{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink) inset}
+.cpick button small{color:var(--ink3);font-weight:600}
+.chead{padding:18px 20px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.chead .big{font-family:var(--serif);font-size:34px;font-weight:650;line-height:1}
+.chead .grow{flex:1;min-width:200px}
+.search{border:1px solid var(--line2);background:var(--surface);border-radius:9px;padding:8px 12px;font-size:14px;min-width:220px}
+.gtitle{font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink3);font-weight:700;margin:18px 2px 8px;display:flex;justify-content:space-between}
+.blk{margin-bottom:10px;overflow:hidden}
+.blkh{display:grid;grid-template-columns:18px 1fr 160px 56px;gap:12px;align-items:center;padding:14px 18px;cursor:pointer;user-select:none}
+.blkh:hover{background:var(--surface2)}
+.blkh .car{color:var(--ink3);transition:transform .15s;font-size:12px}
+.blk.open .blkh .car{transform:rotate(90deg)}
+.blkh b{font-size:15px}
+.blkh .n{font-size:12.5px;color:var(--ink2);text-align:right;font-weight:600}
+@media (max-width:640px){.blkh{grid-template-columns:18px 1fr 56px}.blkh .prog{display:none}}
+.tops{border-top:1px solid var(--line);padding:6px 18px 10px 48px}
+.top{display:grid;grid-template-columns:20px 1fr;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14px;line-height:1.5}
+.top label{cursor:pointer;display:block}
+.refs{display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.ref{font-size:12.5px;color:var(--ink2);display:flex;gap:7px;align-items:baseline;line-height:1.4}
+.ref .rt{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:1px 6px;border-radius:5px;flex:none}
+.ref .rt.e{background:var(--accent);color:var(--accent-ink)}
+.ref .rt.s{background:var(--surface2);border:1px solid var(--line2);color:var(--ink3)}
+.ref a{color:var(--ink2);text-decoration:underline;text-decoration-color:var(--line2)}
+.ref a:hover{color:var(--accent)}
+.legend{display:flex;gap:12px;align-items:center;font-size:12px;color:var(--ink3);margin:2px 2px 0}
+.top:last-child{border-bottom:0}
+.top.done label>span{color:var(--ink3);text-decoration:line-through;text-decoration-color:var(--line2)}
+.top input{margin-top:3px}
+mark{background:#ffe48a;color:inherit;border-radius:3px;padding:0 1px}
+.blkbar{display:flex;align-items:center;gap:8px}
+/* mapa */
+.mapwrap{display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start}
+@media (max-width:900px){.mapwrap{grid-template-columns:1fr}}
+.mapcard{position:relative;overflow:hidden;padding:0}
+#brmap{width:100%;height:auto;display:block;touch-action:none;cursor:grab;background:var(--surface)}
+#brmap.adding{cursor:crosshair}
+#brmap .uf{fill:var(--surface2);stroke:var(--line2);stroke-linejoin:round}
+#brmap .uflbl{font:600 11px var(--sans);fill:var(--ink3);text-anchor:middle;pointer-events:none}
+#brmap .mk{cursor:pointer}
+#brmap .mlbl{font:600 11px var(--sans);fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-linejoin:round;pointer-events:none}
+.mapctl{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:6px}
+.mapctl button{width:34px;height:34px;border-radius:9px;border:1px solid var(--line2);background:var(--surface);cursor:pointer;font-weight:700;font-size:16px;box-shadow:var(--shadow)}
+.mapbar{position:absolute;left:12px;top:12px;display:flex;gap:6px;flex-wrap:wrap}
+.maphint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:var(--shadow)}
+.mside{display:flex;flex-direction:column;gap:12px}
+.mside .card{padding:14px 16px}
+.mside h4{margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink3);font-weight:700}
+.lg{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--ink2)}
+.lg div{display:flex;align-items:center;gap:8px}
+.ccrow{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:14px;font-weight:600;cursor:pointer}
+.lrow{display:grid;grid-template-columns:16px 1fr auto;gap:8px;align-items:center;padding:6px 0;border-top:1px dashed var(--line);font-size:13px;cursor:pointer}
+.lrow:hover{color:var(--accent)}
+.mine{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;background:#e8a100;color:#1c1d1f;border-radius:5px;padding:1px 6px;margin-left:4px;vertical-align:1px}
+.minecard{border:2px solid #e8a100 !important}
+.minerow{display:flex;gap:8px;padding:7px 0;border-top:1px dashed var(--line);font-size:13px;cursor:pointer;align-items:flex-start}
+.minerow:first-of-type{border-top:0}
+.lrow small{color:var(--ink3)}
+.mform{display:flex;flex-direction:column;gap:8px}
+.mform input,.mform select{border:1px solid var(--line2);border-radius:8px;padding:7px 9px;background:var(--surface);font-size:13px;width:100%}
+/* drawer */
+.ovl{position:fixed;inset:0;background:rgba(10,12,14,.45);backdrop-filter:blur(2px);z-index:50;display:flex;justify-content:flex-end;animation:fade .15s}
+.ovl.center{justify-content:center;align-items:flex-start;padding:40px 16px;overflow:auto}
+@keyframes fade{from{opacity:0}}
+.drawer{width:min(760px,100%);height:100%;overflow:auto;background:var(--bg);border-left:1px solid var(--line);animation:slide .2s ease-out}
+@keyframes slide{from{transform:translateX(30px);opacity:.5}}
+.dhead{padding:26px 28px 20px;background:var(--surface);border-bottom:1px solid var(--line);position:relative}
+.dhead .stripe{position:absolute;left:0;right:0;top:0;height:5px}
+.dhead h2{font-family:var(--serif);font-size:30px;margin:4px 0 2px;letter-spacing:-.02em;line-height:1.1}
+.dbody{padding:22px 28px 60px;display:flex;flex-direction:column;gap:18px}
+.sec{padding:18px 20px}
+.sec h4{margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink3);font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px 18px}
+.facts div span{display:block;font-size:11.5px;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.facts div b{font-weight:600;font-size:14.5px}
+.countbig{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px}
+.countbig div{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-width:130px}
+.countbig b{font-family:var(--serif);font-size:26px;display:block;line-height:1.05}
+.countbig span{font-size:12px;color:var(--ink2)}
+.tl{position:relative;padding-left:4px}
+.tli{display:grid;grid-template-columns:22px 92px 1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line)}
+.tli:last-child{border-bottom:0}
+.tli.past{opacity:.5}
+.tli.now{background:var(--accent-soft);border-radius:8px;padding-left:6px;padding-right:6px;opacity:1}
+.tli .dt{font-size:12.5px;color:var(--ink2);font-weight:600}
+.tli .tt{font-size:14px}
+.tli .tg{font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;color:#fff}
+.todayline{display:flex;align-items:center;gap:8px;color:var(--accent);font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:6px 0}
+.todayline::before,.todayline::after{content:"";flex:1;height:2px;background:var(--accent);opacity:.5}
+input[type=checkbox]{accent-color:var(--accent);width:16px;height:16px;cursor:pointer}
+.mat{display:grid;grid-template-columns:1fr 150px 44px;gap:12px;align-items:center;padding:7px 0}
+.mat .g{font-size:11px;color:var(--ink3);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+input[type=range]{accent-color:var(--accent);width:100%}
+.matc{border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.mat-links .matc a.mm{border:0;padding:0}
+.mfs{display:flex;gap:6px;flex-wrap:wrap}
+.mfs .mf{cursor:pointer;background:transparent;color:inherit;font:inherit;display:inline-flex;flex-direction:row;padding:4px 10px;border:1px solid var(--line);border-radius:99px;font-size:12.5px;font-weight:600}
+.mat-links{display:flex;flex-direction:column;gap:8px}
+.mat-links a{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;text-decoration:none;color:inherit}
+.mat-links a b{font-size:14px}
+.mat-links a span{font-size:12.5px;color:var(--ink2)}
+.mat-links a:hover{border-color:var(--accent)}
+.et-ov{display:flex;gap:6px;overflow-x:auto;padding:2px 0 12px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+.et-ov a{flex:0 0 auto;display:flex;flex-direction:column;gap:2px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;text-decoration:none;color:inherit;min-width:110px;max-width:170px}
+.et-ov a span{font-size:11.5px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.et-ov a b{font-size:12.5px;line-height:1.25}
+.et-ov a.past{opacity:.5}
+.etapa2{padding:14px 0;border-bottom:1px dashed var(--line);scroll-margin-top:80px}
+.etapa2:last-child{border-bottom:0}
+.et-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.et-head>b{font-size:14.5px}
+.et-when{display:flex;flex-direction:column;align-items:flex-end;gap:1px;font-variant-numeric:tabular-nums}
+.et-date{font-size:12.5px;font-weight:600}
+.et-st{font-size:11.5px;color:var(--ink2)}
+.et-when.now .et-st{color:#c8372d;font-weight:600}
+.et-when.soon .et-st{color:#d0741a;font-weight:600}
+.et-when.past{opacity:.55}
+.et-chips{display:flex;gap:5px;flex-wrap:wrap;margin:6px 0 2px}
+.et-chip{font-size:11.5px;padding:2px 8px;border-radius:99px;background:var(--soft,rgba(127,127,127,.12));color:var(--ink2)}
+.et-alert{margin:8px 0 4px;padding:8px 10px;border-left:3px solid #c8372d;background:rgba(200,55,45,.07);border-radius:4px;font-size:13px}
+.et-det{margin:6px 0 0;color:var(--ink2);font-size:13.5px;white-space:pre-wrap}
+.et-sub{margin:12px 0 5px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink2);font-weight:700}
+.et-recs{margin:0;padding-left:18px;font-size:13.5px}
+.et-recs li{margin:3px 0}
+.et-plan,.et-chk{display:flex;flex-direction:column;gap:3px}
+.et-plan label{display:grid;grid-template-columns:18px 78px 1fr auto;gap:8px;align-items:baseline;font-size:13.5px;cursor:pointer}
+.et-plan .d{font-size:12px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.et-plan .n{font-size:11.5px;color:var(--ink2)}
+.et-plan label.late .n{color:#c8372d;font-weight:600}
+.et-chk label{display:flex;gap:8px;align-items:baseline;font-size:13.5px;cursor:pointer}
+.et-plan label.done .t,.et-chk label.done span{text-decoration:line-through;opacity:.55}
+.etapa{padding:10px 0;border-bottom:1px dashed var(--line)}
+.etapa:last-child{border-bottom:0}
+.etapa b{display:block}
+.etapa span{color:var(--ink2);font-size:13.5px;white-space:pre-wrap}
+textarea.notes{width:100%;min-height:150px;border:1px solid var(--line2);border-radius:10px;padding:12px;background:var(--surface2);resize:vertical;line-height:1.5}
+.saved{font-size:11.5px;color:var(--ok);text-transform:none;letter-spacing:0;font-weight:600}
+/* form */
+.modal{width:min(820px,100%);background:var(--bg);border-radius:18px;border:1px solid var(--line);box-shadow:0 30px 80px -20px rgba(0,0,0,.4);animation:pop .18s ease-out}
+@keyframes pop{from{transform:scale(.98);opacity:0}}
+.mhead{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--surface);border-radius:18px 18px 0 0}
+.mhead h3{margin:0;font-family:var(--serif);font-size:24px}
+.mbody{padding:20px 24px;display:flex;flex-direction:column;gap:20px}
+.mfoot{padding:16px 24px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;background:var(--surface);border-radius:0 0 18px 18px;position:sticky;bottom:0}
+fieldset{border:0;padding:0;margin:0}
+legend{font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink3);font-weight:700;margin-bottom:10px;padding:0}
+.fg{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.f{display:flex;flex-direction:column;gap:5px;grid-column:span 3}
+.f.s2{grid-column:span 2}.f.s6{grid-column:span 6}.f.s1{grid-column:span 1}
+@media (max-width:640px){.f,.f.s2,.f.s1{grid-column:span 6}}
+.f label{font-size:12.5px;font-weight:600;color:var(--ink2)}
+.f input,.f select,.f textarea,.lr input,.lr select{border:1px solid var(--line2);border-radius:9px;padding:8px 10px;background:var(--surface);width:100%}
+.f input:focus,.f select:focus,.f textarea:focus,.lr input:focus,.lr select:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:transparent}
+.lr{display:grid;gap:8px;align-items:center;margin-bottom:8px}
+.lr.ev{grid-template-columns:1.6fr 1fr 1fr 1fr 32px}
+.lr.et{grid-template-columns:1fr 2fr 32px}
+.lr.mt{grid-template-columns:2fr 1fr 32px}
+@media (max-width:640px){.lr.ev,.lr.et,.lr.mt{grid-template-columns:1fr 1fr}}
+.x{border:0;background:transparent;cursor:pointer;color:var(--ink3);font-size:18px;border-radius:7px;height:32px}
+.x:hover{background:var(--surface2);color:var(--danger)}
+.colors{display:flex;gap:6px;flex-wrap:wrap}
+.sw{width:26px;height:26px;border-radius:50%;border:2px solid transparent;cursor:pointer}
+.sw.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--bg) inset}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;z-index:99;animation:pop .15s}
+.hint{font-size:12.5px;color:var(--ink3)}
+.confirm{width:min(420px,100%);margin-top:18vh}
+.loading{padding:60px;text-align:center;color:var(--ink3)}
+
+/* Leaflet 1.9.4 (BSD-2) */
+
+
+.leaflet-pane,
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-tile-container,
+.leaflet-pane > svg,
+.leaflet-pane > canvas,
+.leaflet-zoom-box,
+.leaflet-image-layer,
+.leaflet-layer {
+	position: absolute;
+	left: 0;
+	top: 0;
+	}
+.leaflet-container {
+	overflow: hidden;
+	}
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+	        user-select: none;
+	  -webkit-user-drag: none;
+	}
+
+.leaflet-tile::selection {
+	background: transparent;
+}
+
+.leaflet-safari .leaflet-tile {
+	image-rendering: -webkit-optimize-contrast;
+	}
+
+.leaflet-safari .leaflet-tile-container {
+	width: 1600px;
+	height: 1600px;
+	-webkit-transform-origin: 0 0;
+	}
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+	display: block;
+	}
+
+
+.leaflet-container .leaflet-overlay-pane svg {
+	max-width: none !important;
+	max-height: none !important;
+	}
+.leaflet-container .leaflet-marker-pane img,
+.leaflet-container .leaflet-shadow-pane img,
+.leaflet-container .leaflet-tile-pane img,
+.leaflet-container img.leaflet-image-layer,
+.leaflet-container .leaflet-tile {
+	max-width: none !important;
+	max-height: none !important;
+	width: auto;
+	padding: 0;
+	}
+
+.leaflet-container img.leaflet-tile {
+	
+	mix-blend-mode: plus-lighter;
+}
+
+.leaflet-container.leaflet-touch-zoom {
+	-ms-touch-action: pan-x pan-y;
+	touch-action: pan-x pan-y;
+	}
+.leaflet-container.leaflet-touch-drag {
+	-ms-touch-action: pinch-zoom;
+	
+	touch-action: none;
+	touch-action: pinch-zoom;
+}
+.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {
+	-ms-touch-action: none;
+	touch-action: none;
+}
+.leaflet-container {
+	-webkit-tap-highlight-color: transparent;
+}
+.leaflet-container a {
+	-webkit-tap-highlight-color: rgba(51, 181, 229, 0.4);
+}
+.leaflet-tile {
+	filter: inherit;
+	visibility: hidden;
+	}
+.leaflet-tile-loaded {
+	visibility: inherit;
+	}
+.leaflet-zoom-box {
+	width: 0;
+	height: 0;
+	-moz-box-sizing: border-box;
+	     box-sizing: border-box;
+	z-index: 800;
+	}
+
+.leaflet-overlay-pane svg {
+	-moz-user-select: none;
+	}
+
+.leaflet-pane         { z-index: 400; }
+
+.leaflet-tile-pane    { z-index: 200; }
+.leaflet-overlay-pane { z-index: 400; }
+.leaflet-shadow-pane  { z-index: 500; }
+.leaflet-marker-pane  { z-index: 600; }
+.leaflet-tooltip-pane   { z-index: 650; }
+.leaflet-popup-pane   { z-index: 700; }
+
+.leaflet-map-pane canvas { z-index: 100; }
+.leaflet-map-pane svg    { z-index: 200; }
+
+.leaflet-vml-shape {
+	width: 1px;
+	height: 1px;
+	}
+.lvml {
+	behavior: url(#default#VML);
+	display: inline-block;
+	position: absolute;
+	}
+
+
+
+
+.leaflet-control {
+	position: relative;
+	z-index: 800;
+	pointer-events: visiblePainted; 
+	pointer-events: auto;
+	}
+.leaflet-top,
+.leaflet-bottom {
+	position: absolute;
+	z-index: 1000;
+	pointer-events: none;
+	}
+.leaflet-top {
+	top: 0;
+	}
+.leaflet-right {
+	right: 0;
+	}
+.leaflet-bottom {
+	bottom: 0;
+	}
+.leaflet-left {
+	left: 0;
+	}
+.leaflet-control {
+	float: left;
+	clear: both;
+	}
+.leaflet-right .leaflet-control {
+	float: right;
+	}
+.leaflet-top .leaflet-control {
+	margin-top: 10px;
+	}
+.leaflet-bottom .leaflet-control {
+	margin-bottom: 10px;
+	}
+.leaflet-left .leaflet-control {
+	margin-left: 10px;
+	}
+.leaflet-right .leaflet-control {
+	margin-right: 10px;
+	}
+
+
+
+
+.leaflet-fade-anim .leaflet-popup {
+	opacity: 0;
+	-webkit-transition: opacity 0.2s linear;
+	   -moz-transition: opacity 0.2s linear;
+	        transition: opacity 0.2s linear;
+	}
+.leaflet-fade-anim .leaflet-map-pane .leaflet-popup {
+	opacity: 1;
+	}
+.leaflet-zoom-animated {
+	-webkit-transform-origin: 0 0;
+	    -ms-transform-origin: 0 0;
+	        transform-origin: 0 0;
+	}
+svg.leaflet-zoom-animated {
+	will-change: transform;
+}
+
+.leaflet-zoom-anim .leaflet-zoom-animated {
+	-webkit-transition: -webkit-transform 0.25s cubic-bezier(0,0,0.25,1);
+	   -moz-transition:    -moz-transform 0.25s cubic-bezier(0,0,0.25,1);
+	        transition:         transform 0.25s cubic-bezier(0,0,0.25,1);
+	}
+.leaflet-zoom-anim .leaflet-tile,
+.leaflet-pan-anim .leaflet-tile {
+	-webkit-transition: none;
+	   -moz-transition: none;
+	        transition: none;
+	}
+
+.leaflet-zoom-anim .leaflet-zoom-hide {
+	visibility: hidden;
+	}
+
+
+
+
+.leaflet-interactive {
+	cursor: pointer;
+	}
+.leaflet-grab {
+	cursor: -webkit-grab;
+	cursor:    -moz-grab;
+	cursor:         grab;
+	}
+.leaflet-crosshair,
+.leaflet-crosshair .leaflet-interactive {
+	cursor: crosshair;
+	}
+.leaflet-popup-pane,
+.leaflet-control {
+	cursor: auto;
+	}
+.leaflet-dragging .leaflet-grab,
+.leaflet-dragging .leaflet-grab .leaflet-interactive,
+.leaflet-dragging .leaflet-marker-draggable {
+	cursor: move;
+	cursor: -webkit-grabbing;
+	cursor:    -moz-grabbing;
+	cursor:         grabbing;
+	}
+
+
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-image-layer,
+.leaflet-pane > svg path,
+.leaflet-tile-container {
+	pointer-events: none;
+	}
+
+.leaflet-marker-icon.leaflet-interactive,
+.leaflet-image-layer.leaflet-interactive,
+.leaflet-pane > svg path.leaflet-interactive,
+svg.leaflet-image-layer.leaflet-interactive path {
+	pointer-events: visiblePainted; 
+	pointer-events: auto;
+	}
+
+
+
+.leaflet-container {
+	background: #ddd;
+	outline-offset: 1px;
+	}
+.leaflet-container a {
+	color: #0078A8;
+	}
+.leaflet-zoom-box {
+	border: 2px dotted #38f;
+	background: rgba(255,255,255,0.5);
+	}
+
+
+
+.leaflet-container {
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-size: 0.75rem;
+	line-height: 1.5;
+	}
+
+
+
+
+.leaflet-bar {
+	box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+	border-radius: 4px;
+	}
+.leaflet-bar a {
+	background-color: #fff;
+	border-bottom: 1px solid #ccc;
+	width: 26px;
+	height: 26px;
+	line-height: 26px;
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	color: black;
+	}
+.leaflet-bar a,
+.leaflet-control-layers-toggle {
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	display: block;
+	}
+.leaflet-bar a:hover,
+.leaflet-bar a:focus {
+	background-color: #f4f4f4;
+	}
+.leaflet-bar a:first-child {
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	}
+.leaflet-bar a:last-child {
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom: none;
+	}
+.leaflet-bar a.leaflet-disabled {
+	cursor: default;
+	background-color: #f4f4f4;
+	color: #bbb;
+	}
+
+.leaflet-touch .leaflet-bar a {
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	}
+.leaflet-touch .leaflet-bar a:first-child {
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+	}
+.leaflet-touch .leaflet-bar a:last-child {
+	border-bottom-left-radius: 2px;
+	border-bottom-right-radius: 2px;
+	}
+
+
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+	font: bold 18px 'Lucida Console', Monaco, monospace;
+	text-indent: 1px;
+	}
+
+.leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out  {
+	font-size: 22px;
+	}
+
+
+
+
+.leaflet-control-layers {
+	box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+	background: #fff;
+	border-radius: 5px;
+	}
+.leaflet-control-layers-toggle {
+	background-image: url(images/layers.png);
+	width: 36px;
+	height: 36px;
+	}
+.leaflet-retina .leaflet-control-layers-toggle {
+	background-image: url(images/layers-2x.png);
+	background-size: 26px 26px;
+	}
+.leaflet-touch .leaflet-control-layers-toggle {
+	width: 44px;
+	height: 44px;
+	}
+.leaflet-control-layers .leaflet-control-layers-list,
+.leaflet-control-layers-expanded .leaflet-control-layers-toggle {
+	display: none;
+	}
+.leaflet-control-layers-expanded .leaflet-control-layers-list {
+	display: block;
+	position: relative;
+	}
+.leaflet-control-layers-expanded {
+	padding: 6px 10px 6px 6px;
+	color: #333;
+	background: #fff;
+	}
+.leaflet-control-layers-scrollbar {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	padding-right: 5px;
+	}
+.leaflet-control-layers-selector {
+	margin-top: 2px;
+	position: relative;
+	top: 1px;
+	}
+.leaflet-control-layers label {
+	display: block;
+	font-size: 13px;
+	font-size: 1.08333em;
+	}
+.leaflet-control-layers-separator {
+	height: 0;
+	border-top: 1px solid #ddd;
+	margin: 5px -10px 5px -6px;
+	}
+
+
+.leaflet-default-icon-path { 
+	background-image: url(images/marker-icon.png);
+	}
+
+
+
+
+.leaflet-container .leaflet-control-attribution {
+	background: #fff;
+	background: rgba(255, 255, 255, 0.8);
+	margin: 0;
+	}
+.leaflet-control-attribution,
+.leaflet-control-scale-line {
+	padding: 0 5px;
+	color: #333;
+	line-height: 1.4;
+	}
+.leaflet-control-attribution a {
+	text-decoration: none;
+	}
+.leaflet-control-attribution a:hover,
+.leaflet-control-attribution a:focus {
+	text-decoration: underline;
+	}
+.leaflet-attribution-flag {
+	display: inline !important;
+	vertical-align: baseline !important;
+	width: 1em;
+	height: 0.6669em;
+	}
+.leaflet-left .leaflet-control-scale {
+	margin-left: 5px;
+	}
+.leaflet-bottom .leaflet-control-scale {
+	margin-bottom: 5px;
+	}
+.leaflet-control-scale-line {
+	border: 2px solid #777;
+	border-top: none;
+	line-height: 1.1;
+	padding: 2px 5px 1px;
+	white-space: nowrap;
+	-moz-box-sizing: border-box;
+	     box-sizing: border-box;
+	background: rgba(255, 255, 255, 0.8);
+	text-shadow: 1px 1px #fff;
+	}
+.leaflet-control-scale-line:not(:first-child) {
+	border-top: 2px solid #777;
+	border-bottom: none;
+	margin-top: -2px;
+	}
+.leaflet-control-scale-line:not(:first-child):not(:last-child) {
+	border-bottom: 2px solid #777;
+	}
+
+.leaflet-touch .leaflet-control-attribution,
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+	box-shadow: none;
+	}
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+	border: 2px solid rgba(0,0,0,0.2);
+	background-clip: padding-box;
+	}
+
+
+
+
+.leaflet-popup {
+	position: absolute;
+	text-align: center;
+	margin-bottom: 20px;
+	}
+.leaflet-popup-content-wrapper {
+	padding: 1px;
+	text-align: left;
+	border-radius: 12px;
+	}
+.leaflet-popup-content {
+	margin: 13px 24px 13px 20px;
+	line-height: 1.3;
+	font-size: 13px;
+	font-size: 1.08333em;
+	min-height: 1px;
+	}
+.leaflet-popup-content p {
+	margin: 17px 0;
+	margin: 1.3em 0;
+	}
+.leaflet-popup-tip-container {
+	width: 40px;
+	height: 20px;
+	position: absolute;
+	left: 50%;
+	margin-top: -1px;
+	margin-left: -20px;
+	overflow: hidden;
+	pointer-events: none;
+	}
+.leaflet-popup-tip {
+	width: 17px;
+	height: 17px;
+	padding: 1px;
+
+	margin: -10px auto 0;
+	pointer-events: auto;
+
+	-webkit-transform: rotate(45deg);
+	   -moz-transform: rotate(45deg);
+	    -ms-transform: rotate(45deg);
+	        transform: rotate(45deg);
+	}
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+	background: white;
+	color: #333;
+	box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+	}
+.leaflet-container a.leaflet-popup-close-button {
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: none;
+	text-align: center;
+	width: 24px;
+	height: 24px;
+	font: 16px/24px Tahoma, Verdana, sans-serif;
+	color: #757575;
+	text-decoration: none;
+	background: transparent;
+	}
+.leaflet-container a.leaflet-popup-close-button:hover,
+.leaflet-container a.leaflet-popup-close-button:focus {
+	color: #585858;
+	}
+.leaflet-popup-scrolled {
+	overflow: auto;
+	}
+
+.leaflet-oldie .leaflet-popup-content-wrapper {
+	-ms-zoom: 1;
+	}
+.leaflet-oldie .leaflet-popup-tip {
+	width: 24px;
+	margin: 0 auto;
+
+	-ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)";
+	filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678);
+	}
+
+.leaflet-oldie .leaflet-control-zoom,
+.leaflet-oldie .leaflet-control-layers,
+.leaflet-oldie .leaflet-popup-content-wrapper,
+.leaflet-oldie .leaflet-popup-tip {
+	border: 1px solid #999;
+	}
+
+
+
+
+.leaflet-div-icon {
+	background: #fff;
+	border: 1px solid #666;
+	}
+
+
+
+
+.leaflet-tooltip {
+	position: absolute;
+	padding: 6px;
+	background-color: #fff;
+	border: 1px solid #fff;
+	border-radius: 3px;
+	color: #222;
+	white-space: nowrap;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	pointer-events: none;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+	}
+.leaflet-tooltip.leaflet-interactive {
+	cursor: pointer;
+	pointer-events: auto;
+	}
+.leaflet-tooltip-top:before,
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {
+	position: absolute;
+	pointer-events: none;
+	border: 6px solid transparent;
+	background: transparent;
+	content: "";
+	}
+
+
+
+.leaflet-tooltip-bottom {
+	margin-top: 6px;
+}
+.leaflet-tooltip-top {
+	margin-top: -6px;
+}
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-top:before {
+	left: 50%;
+	margin-left: -6px;
+	}
+.leaflet-tooltip-top:before {
+	bottom: 0;
+	margin-bottom: -12px;
+	border-top-color: #fff;
+	}
+.leaflet-tooltip-bottom:before {
+	top: 0;
+	margin-top: -12px;
+	margin-left: -6px;
+	border-bottom-color: #fff;
+	}
+.leaflet-tooltip-left {
+	margin-left: -6px;
+}
+.leaflet-tooltip-right {
+	margin-left: 6px;
+}
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {
+	top: 50%;
+	margin-top: -6px;
+	}
+.leaflet-tooltip-left:before {
+	right: 0;
+	margin-right: -12px;
+	border-left-color: #fff;
+	}
+.leaflet-tooltip-right:before {
+	left: 0;
+	margin-left: -12px;
+	border-right-color: #fff;
+	}
+
+
+
+@media print {
+	
+	.leaflet-control {
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+		}
+	}
+
+/* mapa interativo */
+.mapcard{min-height:200px}
+#lmapslot{height:min(74vh,780px);min-height:460px;border-radius:inherit;overflow:hidden}
+#lmap{width:100%;height:100%;font-family:var(--sans)}
+#lmap.adding,#lmap.adding .leaflet-interactive{cursor:crosshair}
+.lmk{background:none;border:0}
+.lmk svg{display:block;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.35))}
+.leaflet-tooltip.mk-tip{background:none;border:0;box-shadow:none;padding:0;margin:0;font:600 12px var(--sans);color:var(--gl);text-shadow:0 0 3px var(--halo),0 0 2px var(--halo),0 0 1px var(--halo),0 0 4px var(--halo)}
+.leaflet-tooltip.mk-tip:before{display:none}
+.mk-tip.k-mine,.mk-tip.k-sel{font-weight:800;font-size:13px}
+.mk-tip.k-home{font-weight:700}
+#lmap:not(.z6) .mk-tip.k-other{display:none}
+#lmap:not(.z11) .mk-tip.k-esc{display:none}
+.leaflet-tooltip.dist-tip{background:var(--ink);color:#fff;border:0;border-radius:6px;font:700 12px var(--sans);padding:3px 8px;box-shadow:var(--shadow)}
+.leaflet-tooltip.dist-tip:before{display:none}
+.glayer{position:absolute;left:0;top:0}
+.ml{position:absolute;white-space:nowrap;transform:translateY(-50%);font:600 12px var(--sans);color:var(--gl);text-shadow:0 0 3px var(--halo),0 0 2px var(--halo),0 0 1px var(--halo),0 0 4px var(--halo);pointer-events:none;line-height:1}
+.ml.mmine,.ml.msel{font-weight:800;font-size:13px}
+.ml.msel{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.ml.mesc{font-weight:600;font-size:12px}
+.ml.mhome{font-weight:700}
+.gl{position:absolute;white-space:nowrap;transform:translate(-50%,-50%);color:var(--gl2);font:500 11px var(--sans);text-shadow:0 0 3px var(--halo),0 0 2px var(--halo),0 0 1px var(--halo);pointer-events:none;line-height:1}
+.gl.dot{transform:translate(-4px,-50%);padding-left:9px;color:var(--gl)}
+.gl.dot:before{content:"";position:absolute;left:0;top:50%;width:5px;height:5px;margin-top:-2.5px;border-radius:50%;background:var(--gl2);box-shadow:0 0 0 1.5px var(--halo)}
+.gl.cap1{font-weight:650;font-size:12px}
+.gl.cap2{font-weight:750;font-size:13px}
+.gl.cap2:before{width:7px;height:7px;margin-top:-3.5px;background:var(--gl)}
+.gl.fx{opacity:.7}
+.gl.st{text-transform:uppercase;letter-spacing:.14em;font-weight:600;font-size:11px;color:var(--gl2);opacity:.85}
+.gl.st.sig{letter-spacing:.06em;font-weight:700}
+.gl.oc{font-style:italic;letter-spacing:.3em;color:var(--water);font-weight:500}
+.gl.mun{font-size:11px;color:var(--gl2);font-style:italic}
+.mtools{position:absolute;left:12px;top:12px;z-index:800;display:flex;gap:4px;align-items:center;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line2);border-radius:10px;padding:4px;box-shadow:var(--shadow)}
+.mtools button{border:0;background:transparent;font:600 12.5px var(--sans);color:var(--ink2);padding:6px 9px;border-radius:7px;cursor:pointer}
+.mtools button:hover{background:var(--line)}
+.mtools button.on{background:var(--ink);color:var(--bg)}
+.msep{width:1px;height:18px;background:var(--line2);margin:0 2px}
+.mlaypop{display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--line2);border-radius:10px;padding:10px 12px;box-shadow:var(--shadow);min-width:230px}
+.mlaypop.open{display:block}
+.mlaypop label{display:flex;gap:8px;align-items:center;font-size:13px;padding:4px 0;cursor:pointer}
+.mlaypop input{width:auto}
+.lmapmsg{display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--surface);padding:10px 14px;border-radius:10px;box-shadow:var(--shadow);z-index:900}
+.lmapfail{padding:40px;text-align:center;color:var(--ink2)}
+.leaflet-container .leaflet-control-attribution{font:11px var(--sans);background:rgba(255,255,255,.75)}
+.leaflet-control-scale-line{font:11px var(--sans)}
+.leaflet-bar a{width:32px;height:32px;line-height:30px;font-size:18px}
+.maphint{z-index:850}
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Meus Concursos</h1>
+      <div class="sub" id="subtitle">Editais, prazos e preparação num só lugar</div>
+    </div>
+    <div class="actions">
+      <span class="sync" id="syncSt"></span>
+      <button class="btn ghost" id="btnConta" title="Conta do GitHub">⚙ Conta</button>
+      <button class="btn ghost" id="btnData" title="Exportar ou importar">⇅ Dados</button>
+      <button class="btn primary" id="btnAdd">＋ Adicionar concurso</button>
+    </div>
+  </header>
+  <div id="banner"></div>
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-v="painel">Painel</button>
+    <button class="tab" data-v="agenda">Agenda</button>
+    <button class="tab" data-v="conteudo">Conteúdo</button>
+    <button class="tab" data-v="mapa">Mapa</button>
+    <button class="tab" data-v="comparar">Comparar</button>
+  </nav>
+  <main id="main"><div class="loading">Carregando seus concursos…</div></main>
+</div>
+<div id="layer"></div>
+
+<script>
+(function(){
+// ---------- constants ----------
+const STATUS = [
+  {k:'interessado', l:'Interessado', c:'#8a8d93'},
+  {k:'inscrito', l:'Inscrito', c:'#2f6fd6'},
+  {k:'estudando', l:'Estudando', c:'#0e8a8f'},
+  {k:'prova_feita', l:'Prova feita', c:'#8b5cf6'},
+  {k:'aprovado', l:'Aprovado', c:'#2f9e57'},
+  {k:'nomeado', l:'Nomeado', c:'#c58b0a'},
+  {k:'descartado', l:'Descartado', c:'#b4382c'},
+];
+const TIPOS = [
+  {k:'inscricao', l:'Inscrição', c:'#2f6fd6'},
+  {k:'isencao', l:'Isenção/redução', c:'#7c4dcc'},
+  {k:'pagamento', l:'Pagamento', c:'#d0741a'},
+  {k:'prova', l:'Prova', c:'#c8372d'},
+  {k:'resultado', l:'Resultado', c:'#2f8f55'},
+  {k:'recurso', l:'Recurso', c:'#6b6f76'},
+  {k:'titulos', l:'Títulos/documentos', c:'#b08410'},
+  {k:'outro', l:'Outro', c:'#4a5a6a'},
+];
+const CORES = ['#0e6e78','#2f6fd6','#7c4dcc','#c8372d','#d0741a','#2f8f55','#b08410','#c2417a','#3a4a5c'];
+const PRIOR = {alta:'Alta',media:'Média',baixa:'Baixa'};
+const st = k => STATUS.find(s=>s.k===k)||STATUS[0];
+const tp = k => TIPOS.find(t=>t.k===k)||TIPOS[TIPOS.length-1];
+
+// ---------- state ----------
+let items = [];          // [{id, ...data}]
+let view = 'painel';
+let filterStatus = 'ativos';
+let sortBy = 'proximo';
+let openId = null;
+let calCursor = new Date(); calCursor.setDate(1);
+let agendaPast = false;
+let contSel = null, contQuery = '', contPend = false, contRefs = true;
+const openBlocks = new Set();
+let store = null;
+let loaded = false;
+
+// ---------- utils ----------
+const $ = s => document.querySelector(s);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+const uid = () => Math.random().toString(36).slice(2,9);
+function matCard(m){
+  const files=(m.arquivos||[]).map(a=>`<button type="button" class="mf" data-dl="${esc(a.url)}" data-fn="${esc(a.nome||a.url.split('/').pop())}">${esc(a.t)} ↓</button>`).join('');
+  return `<div class="matc"><a class="mm" href="${esc(m.url||((m.arquivos||[])[0]||{}).url||'#')}" target="_blank" rel="noopener"><b>${esc(m.titulo)}</b><span>${esc(m.tipo||'')}${m.obs?' · '+esc(m.obs):''}</span></a>${files?`<div class="mfs">${files}</div>`:''}</div>`;
+}
+function etapaWhen(x){
+  if(!x.inicio) return '';
+  const a=pd(x.inicio), b=pd(x.fim||x.inicio); const t=today();
+  const rng = x.fim&&x.fim!==x.inicio ? fd(x.inicio,false)+' – '+fd(x.fim) : fd(x.inicio);
+  let st='', cls='';
+  if(b<t){ st='encerrado'; cls='past' }
+  else if(a<=t){ const n=diff(b); st=n===0?'último dia hoje':'prazo máximo '+rel(n); cls='now' }
+  else { const n=diff(a); st=(x.fim&&x.fim!==x.inicio?'abre ':'')+rel(n); cls=n<=14?'soon':'' }
+  return `<div class="et-when ${cls}"><span class="et-date">${rng}</span><span class="et-st">${st}</span></div>`;
+}
+function etapasHtml(c){
+  const E=c.etapas||[]; if(!E.length) return '';
+  const rich=E.some(x=>x.inicio||x.recs||x.check||x.plano);
+  if(!rich) return E.map(x=>`<div class="etapa"><b>${esc(x.nome)}</b><span>${esc(x.detalhe||'')}</span></div>`).join('');
+  const dated=E.map((x,i)=>({x,i})).filter(o=>o.x.inicio).sort((a,b)=>pd(a.x.inicio)-pd(b.x.inicio));
+  const ov = dated.length? `<div class="et-ov">${dated.map(({x,i})=>{ const b=pd(x.fim||x.inicio); const past=b<today(); return `<a href="javascript:void 0" data-etgo="${i}" class="${past?'past':''}"><span>${fd(x.inicio,false)}${x.fim&&x.fim!==x.inicio?' – '+fd(x.fim,false):''}</span><b>${esc(x.curto||x.nome)}</b></a>` }).join('')}</div>`:'';
+  return ov + E.map((x,i)=>{
+    const chips=[x.carater,x.peso,x.minimo].filter(Boolean).map(v=>`<span class="et-chip">${esc(v)}</span>`).join('');
+    const plano=(x.plano&&x.plano.length)?`<div class="et-sub">Plano de preparação</div><div class="et-plan">${x.plano.map((p,ci)=>{ const n=p.ate?diff(pd(p.ate)):null; const late=n!=null&&n<0&&!p.feito; return `<label class="${p.feito?'done':''} ${late?'late':''}"><input type="checkbox" data-etplan="${i}|${ci}" ${p.feito?'checked':''}><span class="d">${p.ate?'até '+fd(p.ate,false):''}</span><span class="t">${esc(p.t)}</span><span class="n">${n==null||p.feito?'':late?'atrasado':rel(n)}</span></label>` }).join('')}</div>`:'';
+    const recs=(x.recs&&x.recs.length)?`<div class="et-sub">Recomendações</div><ul class="et-recs">${x.recs.map(r=>`<li>${esc(r)}</li>`).join('')}</ul>`:'';
+    const chk=(x.check&&x.check.length)?`<div class="et-sub">Checklist ${x.check.filter(k=>k.feito).length}/${x.check.length}</div><div class="et-chk">${x.check.map((k,ci)=>`<label class="${k.feito?'done':''}"><input type="checkbox" data-etchk="${i}|${ci}" ${k.feito?'checked':''}><span>${esc(k.t)}</span></label>`).join('')}</div>`:'';
+    const alerta=x.alerta?`<div class="et-alert">${esc(x.alerta)}</div>`:'';
+    const mats=(c.materiais||[]).filter(m=>m.etapa===i);
+    const matsH=mats.length?`<div class="et-sub">Materiais prontos</div><div class="mat-links">${mats.map(m=>matCard(m)).join('')}</div>`:'';
+    return `<div class="etapa2" id="et${i}"><div class="et-head"><b>${esc(x.nome)}</b>${etapaWhen(x)}</div>${chips?`<div class="et-chips">${chips}</div>`:''}${alerta}${x.detalhe?`<p class="et-det">${esc(x.detalhe)}</p>`:''}${matsH}${plano}${recs}${chk}</div>`;
+  }).join('');
+}
+function today(){const d=new Date();d.setHours(0,0,0,0);return d}
+function pd(s){ if(!s) return null; const [y,m,d]=String(s).split('-').map(Number); if(!y) return null; return new Date(y,(m||1)-1,d||1); }
+function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function diff(d){return Math.round((d-today())/86400000)}
+const MES=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+function fd(s,withYear=true){const d=pd(s); if(!d) return '—'; return d.getDate()+' '+MES[d.getMonth()]+(withYear?' '+d.getFullYear():'')}
+function frange(e){ if(e.fim && e.fim!==e.inicio){const a=pd(e.inicio),b=pd(e.fim); const sameY=a.getFullYear()===b.getFullYear(); return (sameY&&a.getMonth()===b.getMonth()? a.getDate() : fd(e.inicio,!sameY))+' – '+fd(e.fim)} return fd(e.inicio)}
+function money(n){ if(n==null||n==='') return '—'; return Number(n).toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0}) }
+function rel(n){ if(n===0) return 'hoje'; if(n===1) return 'amanhã'; if(n===-1) return 'ontem'; if(n>1) return 'em '+n+' dias'; return 'há '+(-n)+' dias' }
+function evState(e){ const a=pd(e.inicio), b=pd(e.fim)||a, t=today(); if(!a) return 'na'; if(b<t) return 'past'; if(a<=t&&b>=t) return 'now'; return 'future' }
+function sortedEvents(c){ return (c.eventos||[]).filter(e=>e.inicio).slice().sort((x,y)=>x.inicio.localeCompare(y.inicio)) }
+function nextEvent(c){
+  const evs = sortedEvents(c).filter(e=>!e.feito && evState(e)!=='past');
+  if(!evs.length) return null;
+  // ongoing first by end date, otherwise earliest start
+  const now = evs.filter(e=>evState(e)==='now').sort((a,b)=>(a.fim||a.inicio).localeCompare(b.fim||b.inicio));
+  return now[0]||evs[0];
+}
+function countdown(e){
+  const s=evState(e);
+  if(s==='now'){ const n=diff(pd(e.fim||e.inicio)); return e.fim&&e.fim!==e.inicio ? (n===0?'termina hoje':'aberto · termina '+rel(n)) : 'hoje' }
+  return rel(diff(pd(e.inicio)));
+}
+function provaEvent(c){ return sortedEvents(c).find(e=>e.tipo==='prova') }
+function topicStats(c){ let t=0,d=0; (c.conteudo||[]).forEach(b=>(b.topicos||[]).forEach(x=>{t++; if(x.feito) d++})); return {t,d} }
+function blockPct(b){ const n=(b.topicos||[]).length; return n? Math.round(100*(b.topicos.filter(x=>x.feito).length)/n) : 0 }
+function studyPct(c){ const ts=topicStats(c); if(ts.t) return Math.round(100*ts.d/ts.t); const m=(c.materias||[]); if(!m.length) return null; return Math.round(m.reduce((s,x)=>s+(Number(x.progresso)||0),0)/m.length) }
+function inscricaoEvent(c){ return sortedEvents(c).find(e=>e.tipo==='inscricao') }
+function urgencyColor(n){ if(n<=3) return 'var(--danger)'; if(n<=10) return 'var(--warn)'; return 'var(--ink2)' }
+function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2200) }
+
+// ---------- storage ----------
+const LKEY='meus-concursos-v1';
+function localStore0(){ loaded=true; setTimeout(render,0); return { mode:'none', async saveConfig(){}, async save(){ openGate() }, async remove(){} } }
+function localStore(){
+  let data={}; try{ data=JSON.parse(localStorage.getItem(LKEY)||'{}') }catch(e){}
+  const persist=()=>{ try{localStorage.setItem(LKEY,JSON.stringify(data))}catch(e){} };
+  const emit=()=>{ items=Object.entries(data).map(([id,v])=>({...v,id})); loaded=true; render() };
+  if(!Object.keys(data).length){
+    fetch('data/concursos.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{ if(!j) return emit();
+      const arr=Array.isArray(j)?j:(j.concursos||[]); arr.forEach(x=>{ if(x&&x.id){ const o={...x}; delete o.id; data[x.id]=o } });
+      if(j.perfil&&j.perfil.casa){ perfil=j.perfil; try{localStorage.setItem(LKEY+'-perfil',JSON.stringify(perfil))}catch(e){} }
+      persist(); emit() }).catch(()=>emit());
+  } else setTimeout(emit,0);
+  try{ const pf=JSON.parse(localStorage.getItem(LKEY+'-perfil')||'null'); if(pf&&pf.casa) perfil=pf }catch(e){}
+  return { mode:'local', async saveConfig(p){ try{localStorage.setItem(LKEY+'-perfil',JSON.stringify(p))}catch(e){} }, async save(id,obj){ data[id]=obj; persist(); emit() }, async remove(id){ delete data[id]; persist(); emit() } };
+}
+// ---------- GitHub (dados no repositório privado) ----------
+const GHKEY='pc-gh';
+function ghCfg(){ try{ return JSON.parse(localStorage.getItem(GHKEY)||'null') }catch(e){ return null } }
+function b64enc(str){ const b=new TextEncoder().encode(str); let s=''; for(let i=0;i<b.length;i+=0x8000) s+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000)); return btoa(s) }
+function b64dec(b64){ const bin=atob(String(b64).replace(/\s/g,'')); const u=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i); return new TextDecoder().decode(u) }
+function ghReq(cfg,path,{method,body,raw}={}){
+  const url=`https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${path.split('/').map(encodeURIComponent).join('/')}`+(method?'':`?ref=${encodeURIComponent(cfg.branch||'main')}&_=${Date.now()}`);
+  const h={'Authorization':'Bearer '+cfg.token,'Accept':raw?'application/vnd.github.raw':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
+  if(body) h['Content-Type']='application/json';
+  return fetch(url,{method:method||'GET',headers:h,body,cache:'no-store'});
+}
+function ghStore(cfg){
+  let data={}, sha=null, timer=null, saving=false, dirty=false;
+  const setSt=t=>{ const el=$('#syncSt'); if(el) el.textContent=t };
+  const emit=()=>{ items=Object.entries(data).map(([id,v])=>({...v,id})); loaded=true; render() };
+  const cache=()=>{ try{ localStorage.setItem(LKEY+'-ghcache',JSON.stringify({data,perfil})) }catch(e){} };
+  const body=()=>JSON.stringify({perfil,concursos:Object.entries(data).map(([id,v])=>({id,...v}))},null,1);
+  async function load(){ setSt('Carregando do GitHub…');
+    const r=await ghReq(cfg,cfg.path);
+    if(r.status===404){ data={}; sha=null }
+    else if(!r.ok) throw new Error(r.status===401?'chave inválida ou expirada':'HTTP '+r.status);
+    else { const j=await r.json(); sha=j.sha; let txt=j.content?b64dec(j.content):null;
+      if(txt===null){ const rr=await ghReq(cfg,cfg.path,{raw:true}); txt=await rr.text() }
+      const o=JSON.parse(txt); const arr=Array.isArray(o)?o:(o.concursos||[]);
+      data={}; arr.forEach(x=>{ if(x&&x.id){ const c={...x}; delete c.id; data[x.id]=c } });
+      if(o.perfil&&o.perfil.casa) perfil=o.perfil }
+    cache(); emit(); setSt('Sincronizado ✓') }
+  const put=()=>ghReq(cfg,cfg.path,{method:'PUT',body:JSON.stringify({message:'Atualiza concursos pelo painel',content:b64enc(body()),...(sha?{sha}:{}),branch:cfg.branch||'main'})});
+  async function flush(){ if(saving){ schedule(); return } saving=true; dirty=false; setSt('Salvando…');
+    try{ let r=await put();
+      if(r.status===409||r.status===422){ const g=await ghReq(cfg,cfg.path); if(g.ok){ sha=(await g.json()).sha; r=await put() } }
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      sha=(await r.json()).content.sha; setSt(dirty?'Salvando…':'Salvo no GitHub ✓') }
+    catch(e){ dirty=true; setSt('Erro ao salvar — nova tentativa em 10 s'); setTimeout(()=>{ if(dirty) flush() },10000) }
+    finally{ saving=false } }
+  function schedule(){ dirty=true; cache(); setSt('Alterações pendentes…'); clearTimeout(timer); timer=setTimeout(flush,1500) }
+  try{ const c=JSON.parse(localStorage.getItem(LKEY+'-ghcache')||'null'); if(c&&c.data){ data=c.data; if(c.perfil&&c.perfil.casa) perfil=c.perfil; setTimeout(emit,0) } }catch(e){}
+  load().catch(e=>{ setSt('Sem conexão com o GitHub'); setBanner('Não foi possível ler seus dados no GitHub ('+esc(e.message)+'). Confira a chave em <b>⚙ Conta</b>.'); loaded=true; render() });
+  window.addEventListener('beforeunload',e=>{ if(dirty||saving){ e.preventDefault(); e.returnValue='' } });
+  return { mode:'github', cfg, reload:load,
+    async saveConfig(p){ perfil=p; schedule() },
+    async save(id,obj){ const o={...obj}; delete o.id; data[id]=o; schedule() },
+    async remove(id){ delete data[id]; schedule(); emit() } };
+}
+function openGate(force){
+  const cur=ghCfg()||{owner:'wiliansventura98-collab',repo:'Processos-C',branch:'main',path:'data/concursos.json',token:''};
+  const layer=document.createElement('div'); layer.className='ovl center'; layer.style.zIndex=80;
+  const logged=!!ghCfg();
+  layer.innerHTML=`<div class="modal gate"><div class="mhead"><h3>${logged?'Conta do GitHub':'Entrar no painel'}</h3>${logged||force===false?'<button class="btn ghost sm" data-c>✕</button>':''}</div>
+   <div class="mbody">
+   <p class="hint" style="margin:0">Este site é público, mas os seus concursos ficam no repositório <b>privado</b> <code>${esc(cur.owner)}/${esc(cur.repo)}</code>. Para vê-los e salvar alterações, cole uma chave de acesso do GitHub. Ela fica guardada só neste navegador.</p>
+   ${logged?'':`<ol><li>Abra <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a>.</li><li>Nome: <i>Painel de concursos</i>. Validade: a que preferir (ex.: 1 ano).</li><li><b>Repository access</b> → <i>Only select repositories</i> → <b>Processos-C</b>.</li><li><b>Permissions</b> → <b>Contents</b> → <i>Read and write</i>.</li><li>Clique em <b>Generate token</b>, copie a chave e cole abaixo.</li></ol>`}
+   <label for="gTok">Chave de acesso (token)</label><input id="gTok" type="password" placeholder="github_pat_…" value="${esc(cur.token||'')}" autocomplete="off">
+   <details style="margin-top:10px"><summary class="hint" style="cursor:pointer">Repositório dos dados</summary>
+    <div class="row2"><div><label for="gOwn">Dono</label><input id="gOwn" value="${esc(cur.owner)}"></div><div><label for="gRep">Repositório</label><input id="gRep" value="${esc(cur.repo)}"></div></div>
+    <div class="row2"><div><label for="gBr">Branch</label><input id="gBr" value="${esc(cur.branch||'main')}"></div><div><label for="gPath">Arquivo</label><input id="gPath" value="${esc(cur.path)}"></div></div>
+   </details>
+   <div class="err" id="gErr"></div></div>
+   <div class="mfoot">${logged?'<button class="btn danger" id="gOut">Sair deste dispositivo</button>':''}<button class="btn primary" id="gGo">${logged?'Salvar':'Entrar'}</button></div></div>`;
+  document.body.appendChild(layer);
+  const close=()=>layer.remove(); const c=layer.querySelector('[data-c]'); if(c) c.onclick=close;
+  const out=layer.querySelector('#gOut'); if(out) out.onclick=()=>{ if(!confirm('Remover a chave e os dados deste navegador? Seus dados continuam no GitHub.')) return; localStorage.removeItem(GHKEY); localStorage.removeItem(LKEY+'-ghcache'); location.reload() };
+  layer.querySelector('#gGo').onclick=async()=>{
+    const cfg={token:layer.querySelector('#gTok').value.trim(),owner:layer.querySelector('#gOwn').value.trim(),repo:layer.querySelector('#gRep').value.trim(),branch:layer.querySelector('#gBr').value.trim()||'main',path:layer.querySelector('#gPath').value.trim()||'data/concursos.json'};
+    const err=layer.querySelector('#gErr'); if(!cfg.token){ err.textContent='Cole a chave de acesso.'; return }
+    err.textContent='Verificando…';
+    try{ const r=await ghReq(cfg,cfg.path); if(r.status===401) throw new Error('Chave inválida ou expirada.'); if(r.status===404) throw new Error('Arquivo ou repositório não encontrado. Confira se a chave dá acesso ao Processos-C.'); if(!r.ok) throw new Error('Erro '+r.status+' do GitHub.');
+      localStorage.setItem(GHKEY,JSON.stringify(cfg)); localStorage.removeItem(LKEY+'-ghcache'); location.reload() }
+    catch(e){ err.textContent=e.message } };
+}
+function dbStore(db){
+  const col = db.collection('concursos');
+  const chains = {};
+  let timer = setTimeout(()=>{ if(!loaded){ setBanner('Não foi possível carregar seus dados ainda. Verifique a conexão; a página continua tentando.'); } },10000);
+  col.onSnapshot(snap=>{
+    if(!snap.metadata.fromCache){ clearTimeout(timer); setBanner('') }
+    items = snap.docs.map(d=>({...d.data(), id:d.id}));
+    loaded = true; render();
+  }, err=>{ clearTimeout(timer); loaded=true; setBanner('Erro ao acessar o armazenamento ('+esc(err.code)+'). Recarregue a página mais tarde.'); render() });
+  function q(id,fn){ chains[id]=(chains[id]||Promise.resolve()).then(fn).catch(e=>{ toast(e&&e.code==='quota_exceeded'?'Limite de armazenamento atingido':'Não foi possível salvar'); console.error(e) }); return chains[id] }
+  const cfg=db.doc('config/perfil'); cfg.onSnapshot(d=>{ if(d.exists){ const v=d.data(); if(v&&v.casa){ perfil=clone(v); if(view==='mapa') render() } } },()=>{});
+  return { mode:'db', saveConfig(p){ return q('__cfg',()=>cfg.set(clone(p))) },
+    save(id,obj){ const body=clone(obj); delete body.id; return q(id,()=>col.doc(id).set(body)) },
+    remove(id){ return q(id,()=>col.doc(id).delete()) } };
+}
+function setBanner(html){ $('#banner').innerHTML = html ? '<div class="banner">'+html+'</div>' : '' }
+function saveItem(c){ c.atualizado = new Date().toISOString(); const i=items.findIndex(x=>x.id===c.id); if(i>=0) items[i]=c; else items.push(c); render(); return store.save(c.id,c) }
+
+// ---------- render ----------
+function render(){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.v===view));
+  const m=$('#main');
+  if(!loaded){ m.innerHTML='<div class="loading">Carregando seus concursos…</div>'; return }
+  const ativos=items.filter(c=>c.status!=='descartado');
+  $('#subtitle').textContent = items.length ? `${ativos.length} concurso${ativos.length!==1?'s':''} em acompanhamento` : 'Editais, prazos e preparação num só lugar';
+  if(view==='painel') m.innerHTML=renderPainel();
+  else if(view==='agenda') m.innerHTML=renderAgenda();
+  else if(view==='conteudo') m.innerHTML=renderConteudo();
+  else if(view==='mapa'){ m.innerHTML=renderMapa(); bindMapa() }
+  else m.innerHTML=renderComparar();
+  if(openId){ const c=items.find(x=>x.id===openId); if(c) renderDrawer(c); else closeLayer() }
+}
+
+function allUpcoming(includePast){
+  const out=[];
+  items.filter(c=>c.status!=='descartado').forEach(c=>sortedEvents(c).forEach((e,i)=>{ const s=evState(e); if(includePast||(s!=='past')) out.push({c,e,s}) }));
+  return out.sort((a,b)=>a.e.inicio.localeCompare(b.e.inicio));
+}
+
+const PRAZO=['inscricao','isencao','pagamento','titulos','recurso'];
+function alertas(){
+  const out=[];
+  items.filter(c=>c.status!=='descartado').forEach(c=>(c.eventos||[]).forEach(e=>{ if(e.feito||!e.inicio) return;
+    const st=evState(e), d0=diff(pd(e.inicio)), d1=diff(pd(e.fim||e.inicio)); let lv=null, msg='';
+    const dias=n=>n===0?'hoje':n===1?'amanhã':'em '+n+' dias';
+    if(st==='past'){ if(PRAZO.includes(e.tipo)&&d1>=-7){ lv='warn'; msg='Prazo encerrado há '+(-d1)+(d1===-1?' dia':' dias')+'. Você concluiu? Marque como feito.' } }
+    else if(e.tipo==='prova'){ if(d0<=30){ lv=d0<=3?'crit':d0<=7?'warn':'info'; msg='Prova '+dias(d0)+'.' } }
+    else if(PRAZO.includes(e.tipo)){ if(st==='now'){ if(d1<=5){ lv=d1<=2?'crit':'warn'; msg=d1===0?'Último dia hoje!':'Termina '+dias(d1)+' ('+fd(e.fim||e.inicio,false)+').' } else if(d0>=-1){ lv='info'; msg='Prazo aberto até '+fd(e.fim||e.inicio,false)+'.' } }
+      else if(d0<=5){ lv=d0<=1?'warn':'info'; msg='Abre '+dias(d0)+(e.fim&&e.fim!==e.inicio?' e vai até '+fd(e.fim,false):'')+'.' } }
+    else if(d0<=3){ lv=d0<=1?'warn':'info'; msg=(e.tipo==='resultado'?'Sai ':'Acontece ')+dias(d0)+'.' }
+    if(lv) out.push({c,e,lv,msg,k:st==='now'?d1:d0}) }));
+  const o={crit:0,warn:1,info:2}; return out.sort((a,b)=>o[a.lv]-o[b.lv]||a.k-b.k);
+}
+function renderAlertas(){
+  const A=alertas(); if(!A.length) return `<section class="card alerts"><div class="ahead"><h3>Alertas</h3><span class="muted">Nenhum prazo nos próximos dias.</span></div></section>`;
+  return `<section class="card alerts"><div class="ahead"><h3>Alertas</h3><span class="muted">${A.length} aviso${A.length>1?'s':''} · baseados no cronograma de cada concurso</span></div>${A.map(a=>`<div class="arow ${a.lv}" data-open="${esc(a.c.id)}"><span class="adot"></span><div style="flex:1;min-width:0"><b>${esc(a.e.titulo)}</b> <span class="muted">· ${esc(a.c.nome)}</span><div class="amsg">${esc(a.msg)} <span class="muted">${frange(a.e)}</span></div></div></div>`).join('')}</section>`;
+}
+function renderPainel(){
+  if(!items.length) return `<div class="card empty"><h3>Nenhum concurso ainda</h3><p>Adicione o primeiro edital que você está acompanhando. Você também pode enviar o PDF do edital no chat com o Claude para ele cadastrar tudo aqui.</p><button class="btn primary" data-act="add">＋ Adicionar concurso</button></div>`;
+  const ativos=items.filter(c=>c.status!=='descartado');
+  // next commitment
+  const nexts = ativos.map(c=>({c,e:nextEvent(c)})).filter(x=>x.e).sort((a,b)=>{
+    const ka = evState(a.e)==='now' ? (a.e.fim||a.e.inicio) : a.e.inicio, kb = evState(b.e)==='now' ? (b.e.fim||b.e.inicio) : b.e.inicio; return ka.localeCompare(kb) });
+  const n0 = nexts[0];
+  let hero = '<div class="card next"><div class="lbl">Próximo compromisso</div><div class="big">Nada pendente</div><div class="who">Cadastre datas nos seus concursos para ver a contagem regressiva.</div></div>';
+  if(n0){ const s=evState(n0.e); const ref = s==='now' ? pd(n0.e.fim||n0.e.inicio) : pd(n0.e.inicio); const n=diff(ref);
+    const big = s==='now' ? (n0.e.fim&&n0.e.fim!==n0.e.inicio ? (n===0?'Último dia':'Aberto · '+n+(n===1?' dia':' dias')) : 'Hoje') : (n===0?'Hoje':n===1?'Amanhã':n+' dias');
+    hero = `<div class="card next" data-open="${esc(n0.c.id)}" style="cursor:pointer"><div class="bar" style="background:${esc(n0.c.cor||'var(--accent)')}"></div><div class="lbl">Próximo compromisso</div><div class="big" style="color:${urgencyColor(n)}">${big}</div><div class="what">${esc(n0.e.titulo)}</div><div class="who">${esc(n0.c.nome)} · ${frange(n0.e)}</div></div>` }
+  const abertas = ativos.filter(c=>{const e=inscricaoEvent(c); return e&&evState(e)==='now'}).length;
+  const provas = ativos.map(provaEvent).filter(e=>e&&evState(e)!=='past').sort((a,b)=>a.inicio.localeCompare(b.inicio));
+  const maxSal = Math.max(0,...ativos.map(c=>Number(c.salario)||0));
+  const p1 = provas[0];
+  const stats = `<div class="stats">
+    <div class="card stat"><div class="n">${ativos.length}</div><div class="t">concursos ativos</div></div>
+    <div class="card stat"><div class="n">${abertas}</div><div class="t">com inscrições abertas</div></div>
+    <div class="card stat"><div class="n">${p1? diff(pd(p1.inicio)) : '—'}</div><div class="t">${p1? 'dias até a próxima prova ('+fd(p1.inicio,false)+')':'nenhuma prova marcada'}</div></div>
+    <div class="card stat"><div class="n">${maxSal? money(maxSal).replace('R$','R$ ').replace(/\s+/,' '):'—'}</div><div class="t">maior salário inicial</div></div>
+  </div>`;
+  // filter & sort
+  let list = items.slice();
+  if(filterStatus==='ativos') list=list.filter(c=>c.status!=='descartado');
+  else if(filterStatus!=='todos') list=list.filter(c=>c.status===filterStatus);
+  const pr={alta:0,media:1,baixa:2};
+  list.sort((a,b)=>{
+    if(sortBy==='salario') return (Number(b.salario)||0)-(Number(a.salario)||0);
+    if(sortBy==='prioridade') return (pr[a.prioridade]??3)-(pr[b.prioridade]??3);
+    if(sortBy==='nome') return String(a.nome).localeCompare(String(b.nome));
+    const ea=nextEvent(a), eb=nextEvent(b); if(!ea&&!eb) return 0; if(!ea) return 1; if(!eb) return -1; return ea.inicio.localeCompare(eb.inicio);
+  });
+  const counts = {}; items.forEach(c=>counts[c.status]=(counts[c.status]||0)+1);
+  const chips = [{k:'ativos',l:'Ativos'},{k:'todos',l:'Todos'},...STATUS.filter(s=>counts[s.k]).map(s=>({k:s.k,l:s.l+' · '+counts[s.k]}))]
+    .map(x=>`<button class="chip ${filterStatus===x.k?'on':''}" data-filter="${x.k}">${esc(x.l)}</button>`).join('');
+  const toolbar = `<div class="toolbar"><div class="chips">${chips}</div>
+    <select class="sel" id="sortSel"><option value="proximo">Ordenar: próximo prazo</option><option value="prioridade">Prioridade</option><option value="salario">Salário</option><option value="nome">Nome</option></select></div>`;
+  const cards = list.map(card).join('') || '<div class="muted" style="padding:20px">Nenhum concurso neste filtro.</div>';
+  return `<section class="hero">${hero}${stats}</section>${renderAlertas()}${toolbar}<section class="grid">${cards}</section>`;
+}
+
+function card(c){
+  const s=st(c.status), e=nextEvent(c), p=provaEvent(c), pct=studyPct(c);
+  const role=[c.cargo,c.enfase].filter(Boolean).join(' · ');
+  const nl = e ? `<div class="nextline"><span>Próximo:</span><strong>${esc(e.titulo)}</strong><span style="margin-left:auto;font-weight:700;color:${urgencyColor(evState(e)==='now'?diff(pd(e.fim||e.inicio)):diff(pd(e.inicio)))}">${countdown(e)}</span></div>` : '<div class="nextline muted">Sem prazos futuros cadastrados</div>';
+  return `<article class="card cc" data-open="${esc(c.id)}">
+    <div class="stripe" style="background:${esc(c.cor||'var(--accent)')}"></div>
+    <div class="row" style="align-items:flex-start"><div><h3>${esc(c.nome||'Sem nome')}</h3><div class="role">${esc(role||c.orgao||'')}</div></div>
+      <span class="pill"><span class="dot" style="background:${s.c}"></span>${s.l}</span></div>
+    <div class="kv">
+      <div><span>Salário</span><b>${money(c.salario)}</b></div>
+      <div><span>Vagas</span><b>${c.vagas||'—'}${c.cadastroReserva?' <small class="muted">+CR</small>':''}</b></div>
+      <div><span>Prova</span><b>${p?fd(p.inicio,false):'—'}</b></div>
+    </div>
+    ${nl}
+    ${pct!=null?`<div><div class="row muted" style="margin-bottom:5px"><span>Preparação</span><span>${pct}%</span></div><div class="prog"><i style="width:${pct}%"></i></div></div>`:''}
+    <div class="row muted"><span>${esc(c.banca?'Banca '+c.banca:'')}</span><span>${c.prioridade?'Prioridade '+esc(PRIOR[c.prioridade]||c.prioridade).toLowerCase():''}</span></div>
+  </article>`;
+}
+
+function renderAgenda(){
+  if(!items.length) return renderPainel();
+  const y=calCursor.getFullYear(), mo=calCursor.getMonth();
+  const first=new Date(y,mo,1); const start=new Date(first); start.setDate(1-((first.getDay()+6)%7));
+  const byDay={};
+  items.filter(c=>c.status!=='descartado').forEach(c=>sortedEvents(c).forEach(e=>{
+    const push=(d,suffix)=>{(byDay[d]=byDay[d]||[]).push({c,e,suffix})};
+    push(e.inicio, e.fim&&e.fim!==e.inicio?' (início)':'');
+    if(e.fim&&e.fim!==e.inicio) push(e.fim,' (fim)');
+  }));
+  const t=iso(today());
+  let cells=['seg','ter','qua','qui','sex','sáb','dom'].map(d=>`<div class="dow">${d}</div>`).join('');
+  for(let i=0;i<42;i++){ const d=new Date(start); d.setDate(start.getDate()+i); const k=iso(d);
+    if(i>=35 && d.getMonth()!==mo) break;
+    const evs=(byDay[k]||[]).map(x=>`<div class="ev ${x.e.feito?'done':''}" style="background:${tp(x.e.tipo).c};box-shadow:inset 3px 0 0 ${esc(x.c.cor||'transparent')}" data-open="${esc(x.c.id)}" title="${esc(x.c.nome+' — '+x.e.titulo+x.suffix)}">${esc(x.e.titulo+x.suffix)}</div>`).join('');
+    cells+=`<div class="day ${d.getMonth()!==mo?'out':''} ${k===t?'today':''}"><span class="dn">${d.getDate()}</span>${evs}</div>` }
+  let mname=first.toLocaleDateString('pt-BR',{month:'long',year:'numeric'}); mname=mname[0].toUpperCase()+mname.slice(1);
+  const cal=`<div class="card cal"><div class="calhead"><button class="btn sm" data-cal="-1">‹</button><h3>${mname}</h3><div style="display:flex;gap:6px"><button class="btn sm" data-cal="0">Hoje</button><button class="btn sm" data-cal="1">›</button></div></div><div class="calgrid">${cells}</div></div>`;
+  const up=allUpcoming(agendaPast);
+  let lastM='', rows='';
+  up.forEach(({c,e,s})=>{ const d=pd(e.inicio); const mk=d.toLocaleDateString('pt-BR',{month:'long',year:'numeric'}); if(mk!==lastM){rows+=`<div class="lgroup">${mk}</div>`;lastM=mk}
+    const n = s==='now'? diff(pd(e.fim||e.inicio)) : diff(d);
+    rows+=`<div class="litem" data-open="${esc(c.id)}" style="${s==='past'||e.feito?'opacity:.5':''}"><div class="d">${d.getDate()}<small>${['dom','seg','ter','qua','qui','sex','sáb'][d.getDay()]}</small></div>
+      <div><div class="w">${esc(e.titulo)}${e.fim&&e.fim!==e.inicio?' <span class="muted">até '+fd(e.fim,false)+'</span>':''}</div><div class="c"><span class="pill" style="padding:1px 7px"><span class="dot" style="background:${esc(c.cor||'var(--accent)')}"></span>${esc(c.nome)}</span><span>${tp(e.tipo).l}</span></div></div>
+      <div class="cd" style="color:${s==='past'?'var(--ink3)':urgencyColor(n)}">${e.feito?'✓ feito':countdown(e)}</div></div>` });
+  const list=`<div class="card"><div class="row" style="padding:14px 18px 6px"><h4 style="margin:0;font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink3)">Linha do tempo</h4><label class="muted" style="display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" id="pastChk" ${agendaPast?'checked':''}> mostrar passados</label></div><div class="list">${rows||'<div class="muted" style="padding:16px 18px">Nenhuma data futura.</div>'}</div></div>`;
+  return `<section class="agenda">${cal}${list}</section>`;
+}
+
+function renderComparar(){
+  if(!items.length) return renderPainel();
+  const rows=items.slice().sort((a,b)=>(Number(b.salario)||0)-(Number(a.salario)||0)).map(c=>{
+    const s=st(c.status), ins=inscricaoEvent(c), p=provaEvent(c), pct=studyPct(c);
+    return `<tr class="click" data-open="${esc(c.id)}"><td><span class="pill" style="border:0;background:transparent;padding:0"><span class="dot" style="background:${esc(c.cor||'var(--accent)')};width:10px;height:10px"></span><b>${esc(c.nome)}</b></span></td>
+      <td><span class="pill"><span class="dot" style="background:${s.c}"></span>${s.l}</span></td>
+      <td>${esc(c.cargo||'—')}${c.enfase?'<div class="muted">'+esc(c.enfase)+'</div>':''}</td>
+      <td>${esc(c.banca||'—')}</td><td><b>${money(c.salario)}</b></td><td>${c.vagas||'—'}${c.vagasTotal?' <span class="muted">/ '+c.vagasTotal+'</span>':''}</td>
+      <td>${ins?fd(ins.fim||ins.inicio):'—'}</td><td>${p?fd(p.inicio)+' <span class="muted">('+rel(diff(pd(p.inicio)))+')</span>':'—'}</td>
+      <td>${c.taxa?money(c.taxa):'—'}</td><td>${esc(c.regime||'—')}</td><td>${esc(c.localProva||'—')}</td><td>${pct!=null?pct+'%':'—'}</td></tr>` }).join('');
+  return `<div class="card tablewrap"><table><thead><tr><th>Concurso</th><th>Status</th><th>Cargo / ênfase</th><th>Banca</th><th>Salário</th><th>Vagas</th><th>Inscrições até</th><th>Prova</th><th>Taxa</th><th>Regime</th><th>Local da prova</th><th>Preparação</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+// ---------- mapa ----------
+const TIPOL = {prova:{l:'Local de prova'}, lotacao:{l:'Lotação / sede'}, regional:{l:'Regional / unidade'}, escola:{l:'Escola (possível lotação)'}};
+let perfil = {casa:{nome:'Presidente Prudente/SP', lat:-22.12, lon:-51.39}};
+let mapHidden = new Set(), mapSel = null, mapAdd = null, mapOnlyMine = false;
+const GOLD='#e8a100';
+function km(a,b){ const R=6371, r=Math.PI/180, dl=(b.lat-a.lat)*r, dn=(b.lon-a.lon)*r; const h=Math.sin(dl/2)**2+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dn/2)**2; return Math.round(2*R*Math.asin(Math.sqrt(h))) }
+function mapItems(){ return items.filter(c=>c.status!=='descartado') }
+function allLocais(){ const out=[]; mapItems().forEach(c=>{ if(mapHidden.has(c.id)) return; (c.locais||[]).forEach((l,i)=>{ if(mapOnlyMine&&!l.minha) return; out.push({c,l,i}) }) }); return out }
+function renderMapa(){
+  if(!items.length) return renderPainel();
+  const its=mapItems();
+  const rows=its.map(c=>{ const n=(c.locais||[]).length; const on=!mapHidden.has(c.id); return `<label class="ccrow"><input type="checkbox" data-mvis="${esc(c.id)}" ${on?'checked':''}><span class="dot" style="width:10px;height:10px;border-radius:50%;background:${esc(c.cor||'var(--accent)')}"></span><span style="flex:1">${esc(c.nome)}</span><small class="muted">${n} ${n===1?'local':'locais'}</small></label>` }).join('');
+  let list='';
+  its.filter(c=>!mapHidden.has(c.id)&&(c.locais||[]).length).forEach(c=>{
+    list+=`<div style="margin-top:10px;font-weight:700;font-size:13px;display:flex;gap:6px;align-items:center"><span class="dot" style="width:8px;height:8px;border-radius:50%;background:${esc(c.cor||'var(--accent)')}"></span>${esc(c.nome)}</div>`;
+    (c.locais||[]).map((l,i)=>({l,i})).filter(({l})=>!mapOnlyMine||l.minha).sort((a,b)=>(b.l.minha?1:0)-(a.l.minha?1:0)||(a.l.tipo||'').localeCompare(b.l.tipo||'')||a.l.nome.localeCompare(b.l.nome)).forEach(({l,i})=>{
+      const d=perfil.casa?km(perfil.casa,l):null;
+      list+=`<div class="lrow" data-mloc="${esc(c.id)}|${i}">${mkIcon(l.tipo,c.cor,7)}<span>${esc(l.nome)}${l.minha&&l.tipo!=='escola'?'<span class="mine">sua</span>':''}<br><small>${esc(TIPOL[l.tipo]?TIPOL[l.tipo].l:l.tipo)}${l.mun?' · '+esc(l.mun):''}${l.cargo?' · '+esc(l.cargo):''}</small></span><small>${d!=null?d.toLocaleString('pt-BR')+' km':''}</small></div>` }) });
+  let sel='';
+  if(mapSel){ const c=items.find(x=>x.id===mapSel.cid); const l=c&&(c.locais||[])[mapSel.i]; if(l){ const d=perfil.casa?km(perfil.casa,l):null;
+    sel=`<div class="card"><h4>Local selecionado</h4><div style="font-weight:700;font-size:16px">${esc(l.nome)}${l.uf?' <span class="muted">'+esc(l.uf)+'</span>':''}</div><div class="muted" style="margin:4px 0 8px">${esc(TIPOL[l.tipo]?TIPOL[l.tipo].l:l.tipo)} · ${esc(c.nome)}</div>${l.minha?'<div style="margin-bottom:6px"><span class="mine" style="margin-left:0">sua lotação</span></div>':''}${l.cargo?`<div style="font-size:13px"><b>Função:</b> ${esc(l.cargo)}</div>`:''}${l.end?`<div style="font-size:13px;margin-top:4px"><b>Endereço:</b> ${esc(l.end)}</div>`:''}${l.mun&&!l.end?`<div style="font-size:13px;margin-top:4px"><b>Município:</b> ${esc(l.mun)}</div>`:''}${l.obs?`<div style="font-size:13px;color:var(--ink2);margin-top:4px">${esc(l.obs)}</div>`:''}${l.tipo==='escola'||l.end?`<div style="margin-top:6px"><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(l.nome+' '+(l.end||l.mun||'')+' '+(l.uf||''))}" target="_blank" rel="noopener" style="font-size:13px">Ver localização exata no Google Maps ↗</a></div>`:''}${d!=null?`<div style="font-size:13px;margin-top:6px"><b>${d.toLocaleString('pt-BR')} km</b> em linha reta de ${esc(perfil.casa.nome)}</div>`:''}<div style="display:flex;gap:6px;margin-top:10px"><button class="btn sm" data-mopen="${esc(c.id)}">Abrir concurso</button><button class="btn sm danger" data-mdel="${esc(c.id)}|${mapSel.i}">Remover</button></div></div>` } }
+  const opts=its.map(c=>`<option value="${esc(c.id)}">${esc(c.nome)}</option>`).join('');
+  const form=`<div class="card"><h4>Adicionar local</h4><div class="mform">
+    <select id="maC">${opts}</select>
+    <select id="maT"><option value="prova">Local de prova</option><option value="lotacao">Lotação / sede</option><option value="regional">Regional / unidade</option><option value="escola">Escola (possível lotação)</option></select>
+    <input id="maN" placeholder="Cidade (ex.: Campinas/SP)">
+    <input id="maF" placeholder="Função/cargo (opcional)">
+    <label class="muted" style="display:flex;gap:6px;align-items:center;font-size:13px"><input type="checkbox" id="maM" style="width:auto"> É a minha lotação</label>
+    <button class="btn primary sm" id="maGo">Clicar no mapa para posicionar</button>
+    <button class="btn sm" id="maHome">Mudar minha cidade (${esc(perfil.casa?perfil.casa.nome:'—')})</button></div></div>`;
+  const legend=`<div class="card"><h4>Legenda</h4><div class="lg"><div><svg width="16" height="16" viewBox="-8 -8 16 16"><circle r="6.5" fill="${GOLD}" fill-opacity=".3" stroke="${GOLD}" stroke-width="2"/><circle r="3" fill="var(--ink2)"/></svg> <b>Sua lotação</b> (cargo que você pleiteia ou passou)</div><div><span style="width:14px;height:10px;background:var(--accent);opacity:.25;border:2px solid ${GOLD};border-radius:2px;display:inline-block"></span> Estado da sua lotação</div><div><svg width="16" height="16"><line x1="1" y1="8" x2="15" y2="8" stroke="var(--ink2)" stroke-width="2" stroke-dasharray="4 3"/></svg> Distância da sua cidade ao local selecionado</div><div>${mkIcon('prova','var(--ink2)',7)} Local de prova</div><div>${mkIcon('lotacao','var(--ink2)',7)} Lotação / sede</div><div>${mkIcon('regional','var(--ink2)',7)} Regional / unidade</div><div>${mkIcon('escola','var(--ink2)',7)} Escola onde você pode ser lotado (aproxime o mapa)</div><div><svg width="16" height="16" viewBox="-8 -8 16 16"><path d="${star(7)}" fill="var(--ink)"/></svg> Sua cidade</div><div><span style="width:14px;height:10px;background:var(--accent);opacity:.3;border-radius:2px;display:inline-block"></span> Estado onde pode haver lotação</div></div></div>`;
+  const t=mapTheme;
+  const ctl=`<div class="mtools"><button data-mz="fit" title="Enquadrar todos os locais">⤢ Ajustar</button><button data-mz="br" title="Brasil inteiro">Brasil</button>${perfil.casa?'<button data-mz="casa" title="Ir para sua cidade">★ Casa</button>':''}<span class="msep"></span><button data-mtheme="claro" class="${t==='claro'?'on':''}">Claro</button><button data-mtheme="escuro" class="${t==='escuro'?'on':''}">Escuro</button><span class="msep"></span><button id="mLayBtn">Camadas ▾</button>
+    <div id="mLayPop" class="mlaypop ${mapLayOpen?'open':''}">${[['mun','Limites municipais (zoom ≥ 7)'],['rios','Rios e lagos'],['rod','Rodovias'],['urb','Manchas urbanas']].map(([k,l])=>`<label><input type="checkbox" data-mlay="${k}" ${mapLay[k]?'checked':''}> ${l}</label>`).join('')}</div></div>`;
+  return `<section class="mapwrap"><div class="card mapcard"><div id="lmapslot"></div>${ctl}<div id="lmapmsg" class="lmapmsg"></div>
+    ${mapAdd?`<div class="maphint">${mapAdd.home?'Clique na sua cidade no mapa':'Clique no mapa onde fica “'+esc(mapAdd.nome)+'”'} · <a href="#" id="maCancel" style="color:inherit">cancelar</a></div>`:''}</div>
+    <div class="mside">${sel}${mineCard(its)}<div class="card"><h4>Concursos no mapa</h4>${rows}<label class="ccrow" style="border-top:1px solid var(--line);margin-top:6px;padding-top:10px"><input type="checkbox" id="mOnly" ${mapOnlyMine?'checked':''}><span style="flex:1">Mostrar só a minha lotação</span></label></div>${list?`<div class="card"><h4>Locais e distância de ${esc(perfil.casa?perfil.casa.nome:'casa')}</h4>${list}</div>`:''}${legend}${form}</div></section>`;
+}
+function mineCard(its){
+  const rows=its.filter(c=>!mapHidden.has(c.id)&&(c.minhaLotacao||(c.locais||[]).some(l=>l.minha))).map(c=>{ const all=(c.locais||[]).map((l,i)=>({l,i})).filter(x=>x.l.minha); const nEsc=all.filter(x=>x.l.tipo==='escola').length; const ms=all.filter(x=>x.l.tipo!=='escola'); const first=ms[0]||all[0]; const d=first&&perfil.casa?km(perfil.casa,first.l):null;
+    return `<div class="minerow" ${first?`data-mloc="${esc(c.id)}|${first.i}"`:''}><span class="dot" style="width:10px;height:10px;border-radius:50%;background:${esc(c.cor||'var(--accent)')};margin-top:4px;flex:none"></span><div style="flex:1"><b>${esc(c.nome)}</b> <small class="muted">${esc(st(c.status).l)}</small><div style="color:var(--ink2)">${esc(c.minhaLotacao||ms.map(x=>x.l.nome).join(', '))}</div>${nEsc?`<small style="color:var(--accent);font-weight:600">${nEsc} escolas possíveis · clique para aproximar</small><br>`:''}${d!=null&&ms.length===1?`<small class="muted">${d.toLocaleString('pt-BR')} km de ${esc(perfil.casa.nome)}</small>`:''}</div></div>` }).join('');
+  return rows?`<div class="card minecard"><h4>Sua lotação</h4>${rows}</div>`:'';
+}
+function star(r){ let p=''; for(let i=0;i<10;i++){ const a=Math.PI/5*i-Math.PI/2, rr=i%2?r*.45:r; p+=(i?'L':'M')+(Math.cos(a)*rr).toFixed(2)+','+(Math.sin(a)*rr).toFixed(2) } return p+'Z' }
+function mkShape(tipo,col,r,extra=''){ if(tipo==='escola') return `<rect x="${-r*.8}" y="${-r*.8}" width="${1.6*r}" height="${1.6*r}" rx="${r*.3}" fill="${col}" stroke="var(--surface)" stroke-width="${r*.3}" ${extra}/>`; if(tipo==='lotacao') return `<rect x="${-r}" y="${-r}" width="${2*r}" height="${2*r}" rx="${r*.25}" transform="rotate(45)" fill="${col}" stroke="var(--surface)" stroke-width="${r*.3}" ${extra}/>`; if(tipo==='regional') return `<circle r="${r}" fill="var(--surface)" stroke="${col}" stroke-width="${r*.55}" ${extra}/>`; return `<circle r="${r}" fill="${col}" stroke="var(--surface)" stroke-width="${r*.3}" ${extra}/>` }
+function mkIcon(tipo,col,r){ return `<svg width="16" height="16" viewBox="-8 -8 16 16" style="flex:none">${mkShape(tipo,esc(col||'var(--accent)'),r*.8)}</svg>` }
+// ---- mapa interativo (Leaflet + bases Natural Earth / IBGE servidas pelo próprio artifact) ----
+const GEO='geo/';
+const MAPTHEMES={
+  claro:{bg:'#c6dce8',land:'#f7f5f0',nb:'#ebe9e3',nbLine:'#c9c4b9',st:'#a89f8f',mun:'#c9bba3',river:'#86b6d3',lake:'#c6dce8',road1:'#e3a65c',road1c:'#fbe3bf',road2:'#d4c6ad',urban:'#ece1cf',gl:'#33312c',gl2:'#77736a',halo:'rgba(255,255,255,.95)',water:'#4c87a7'},
+  escuro:{bg:'#0d1b24',land:'#1f2529',nb:'#171c1f',nbLine:'#30373c',st:'#5d6872',mun:'#2e363c',river:'#2f6a8b',lake:'#0d1b24',road1:'#9a7442',road1c:'#5a4528',road2:'#3a4146',urban:'#2a3237',gl:'#ebe7df',gl2:'#9ba4ab',halo:'rgba(10,14,17,.92)',water:'#7cb3d3'}};
+let mapTheme='claro'; try{ mapTheme=localStorage.getItem('meus-concursos-tema')||'claro' }catch(e){}
+let mapLay={mun:true,rios:true,rod:true,urb:true}; try{ Object.assign(mapLay,JSON.parse(localStorage.getItem('meus-concursos-camadas')||'{}')) }catch(e){}
+let mapLayOpen=false, mapFirstFit=false;
+let LM=null;
+const T=()=>MAPTHEMES[mapTheme]||MAPTHEMES.claro;
+async function gj(path){ const r=await fetch(GEO+path); if(!r.ok) throw new Error(path); return r.json() }
+
+function ensureMap(){
+  if(LM) return LM;
+  if(!window.L) return null;
+  const el=document.createElement('div'); el.id='lmap';
+  const map=L.map(el,{zoomControl:false,preferCanvas:true,minZoom:3,maxZoom:17,zoomSnap:.5,zoomDelta:.5,wheelPxPerZoomLevel:90,attributionControl:true,maxBounds:[[-60,-100],[20,-15]],maxBoundsViscosity:.6});
+  map.attributionControl.setPrefix(false);
+  map.attributionControl.addAttribution('Base: Natural Earth · Municípios: IBGE (geodata-br)');
+  L.control.zoom({position:'topright',zoomInTitle:'Aproximar',zoomOutTitle:'Afastar'}).addTo(map);
+  L.control.scale({imperial:false,position:'bottomleft',maxWidth:140}).addTo(map);
+  [['pLand',200],['pUrban',230],['pMun',250],['pWater',300],['pRoad',320],['pState',360],['pLine',380],['pLabel',450]].forEach(([n,z])=>{ const p=map.createPane(n); p.style.zIndex=z; if(n==='pLabel'||n==='pLine') p.style.pointerEvents='none' });
+  const R=n=>L.canvas({pane:n,padding:.6});
+  LM={map,el,R:{land:R('pLand'),urban:R('pUrban'),mun:R('pMun'),water:R('pWater'),road:R('pRoad'),state:R('pState')},data:{},L:{},mun:{},munIdx:null,markers:L.layerGroup().addTo(map),line:L.layerGroup().addTo(map)};
+  LM.labelDiv=L.DomUtil.create('div','glayer',map.getPane('pLabel'));
+  map.setView([-15,-53],4);
+  map.on('click',e=>{ if(mapAdd){ placeAdd(e.latlng.lng,e.latlng.lat); return } if(mapSel){ mapSel=null; render() } });
+  map.on('zoomend',()=>{ zoomClass(); restyle(); updateLayers() });
+  map.on('moveend',()=>{ updateMun(); drawLabels() });
+  loadBase();
+  return LM;
+}
+async function loadBase(){
+  try{
+    const [co,st]=await Promise.all([gj('countries.json'),gj('states.json')]);
+    LM.data.countries=co; LM.data.states=st;
+    LM.L.countries=L.geoJSON(co,{pane:'pLand',renderer:LM.R.land,interactive:false,style:f=>styleCountry(f)}).addTo(LM.map);
+    LM.L.states=L.geoJSON(st,{pane:'pState',renderer:LM.R.state,interactive:false,style:f=>styleState(f)}).addTo(LM.map);
+    LM.L.areas=L.geoJSON(st,{pane:'pUrban',renderer:LM.R.urban,interactive:false,style:f=>styleArea(f)}).addTo(LM.map);
+    drawLabels();
+    const [ri,la,ro,ur,pl,mi]=await Promise.all([gj('rivers.json'),gj('lakes.json'),gj('roads.json'),gj('urban.json'),gj('places.json'),gj('mun/index.json')]);
+    LM.data.places=pl; LM.munIdx=mi;
+    LM.L.lakes=L.geoJSON(la,{pane:'pWater',renderer:LM.R.water,interactive:false,style:()=>({stroke:false,fillColor:T().lake,fillOpacity:1})});
+    LM.L.rivers1=L.geoJSON(ri,{pane:'pWater',renderer:LM.R.water,interactive:false,filter:f=>f.properties.r<=5,style:()=>styleRiver(1)});
+    LM.L.rivers2=L.geoJSON(ri,{pane:'pWater',renderer:LM.R.water,interactive:false,filter:f=>f.properties.r>5,style:()=>styleRiver(2)});
+    LM.L.roads1=L.geoJSON(ro,{pane:'pRoad',renderer:LM.R.road,interactive:false,filter:f=>f.properties.t==='Major Highway',style:()=>styleRoad(1)});
+    LM.L.roads2=L.geoJSON(ro,{pane:'pRoad',renderer:LM.R.road,interactive:false,filter:f=>f.properties.t!=='Major Highway'&&f.properties.t!=='Ferry Route',style:()=>styleRoad(2)});
+    LM.L.urban=L.geoJSON(ur,{pane:'pUrban',renderer:LM.R.urban,interactive:false,style:()=>({stroke:false,fillColor:T().urban,fillOpacity:1})});
+    updateLayers(); updateMun(); drawLabels();
+  }catch(err){ console.warn('mapa base',err); const s=document.getElementById('lmapmsg'); if(s){ s.textContent='Não foi possível carregar a base do mapa.'; s.style.display='block' } }
+}
+function areaMaps(){ const areaFill={}, mineArea={}; mapItems().forEach(c=>{ if(mapHidden.has(c.id)) return; if(!mapOnlyMine) (c.areas||[]).forEach(uf=>{ areaFill[uf]=c.cor||'#0e6e78' }); (c.minhaAreas||[]).forEach(uf=>{ mineArea[uf]=c.cor||'#0e6e78' }) }); return {areaFill,mineArea} }
+function styleCountry(f){ const t=T(), br=f.properties.a==='BRA'; return {color:t.nbLine,weight:br?1.2:.8,fillColor:br?t.land:t.nb,fillOpacity:1} }
+function styleState(f){ const t=T(), z=LM?LM.map.getZoom():4, {mineArea}=areaMaps(); const mine=mineArea[f.properties.uf];
+  return mine?{color:GOLD,weight:z>=7?3:2.4,opacity:.95,fill:false}:{color:t.st,weight:z>=7?1.4:z>=5?1.1:.8,opacity:.9,dashArray:z>=6?'5 4':null,fill:false} }
+function styleArea(f){ const {areaFill,mineArea}=areaMaps(); const uf=f.properties.uf; const col=mineArea[uf]||areaFill[uf];
+  return col?{stroke:false,fillColor:col,fillOpacity:mineArea[uf]?(mapTheme==='escuro'?.2:.13):.07}:{stroke:false,fillOpacity:0} }
+function styleRiver(k){ const z=LM?LM.map.getZoom():4; const w=k===1?Math.max(.8,(z-3)*.45):Math.max(.5,(z-5)*.35); return {color:T().river,weight:w,opacity:.95,lineCap:'round'} }
+function styleRoad(k){ const z=LM?LM.map.getZoom():4; return k===1?{color:T().road1,weight:Math.max(.7,(z-3.5)*.55),opacity:.95,lineCap:'round'}:{color:T().road2,weight:Math.max(.5,(z-5)*.45),opacity:.95,lineCap:'round'} }
+function restyle(){ if(!LM||!LM.L.states) return; const t=T();
+  LM.el.style.background=t.bg; LM.el.style.setProperty('--gl',t.gl); LM.el.style.setProperty('--gl2',t.gl2); LM.el.style.setProperty('--halo',t.halo); LM.el.style.setProperty('--water',t.water);
+  LM.L.countries.setStyle(styleCountry); LM.L.states.setStyle(styleState); LM.L.areas.setStyle(styleArea);
+  if(LM.L.rivers1){ LM.L.rivers1.setStyle(()=>styleRiver(1)); LM.L.rivers2.setStyle(()=>styleRiver(2)); LM.L.roads1.setStyle(()=>styleRoad(1)); LM.L.roads2.setStyle(()=>styleRoad(2)); LM.L.lakes.setStyle(()=>({stroke:false,fillColor:t.lake,fillOpacity:1})); LM.L.urban.setStyle(()=>({stroke:false,fillColor:t.urban,fillOpacity:1})) }
+  Object.values(LM.mun).forEach(m=>m.layer&&m.layer.setStyle(styleMun)) }
+function styleMun(){ const z=LM.map.getZoom(); return {color:T().mun,weight:z>=10?1:.6,opacity:1,fill:false} }
+function showLayer(l,on){ if(!l) return; const has=LM.map.hasLayer(l); if(on&&!has) l.addTo(LM.map); if(!on&&has) LM.map.removeLayer(l) }
+function updateLayers(){ if(!LM||!LM.L.rivers1) return; const z=LM.map.getZoom();
+  showLayer(LM.L.lakes,mapLay.rios); showLayer(LM.L.rivers1,mapLay.rios); showLayer(LM.L.rivers2,mapLay.rios&&z>=6);
+  showLayer(LM.L.roads1,mapLay.rod&&z>=4.5); showLayer(LM.L.roads2,mapLay.rod&&z>=6.5); showLayer(LM.L.urban,mapLay.urb&&z>=6) }
+async function updateMun(){ if(!LM||!LM.munIdx) return; const z=LM.map.getZoom(), on=mapLay.mun&&z>=7, b=LM.map.getBounds();
+  for(const [uf,bb] of Object.entries(LM.munIdx)){ const vis=on&&b.intersects(L.latLngBounds([bb[1],bb[0]],[bb[3],bb[2]])); let m=LM.mun[uf];
+    if(vis&&!m){ m=LM.mun[uf]={loading:true}; try{ const d=await gj('mun/'+uf+'.json'); m.data=d; m.layer=L.geoJSON(d,{pane:'pMun',renderer:LM.R.mun,interactive:false,style:styleMun}); }catch(e){ delete LM.mun[uf]; continue } m.loading=false; drawLabels() }
+    if(m&&m.layer){ const want=on&&b.intersects(L.latLngBounds([bb[1],bb[0]],[bb[3],bb[2]])); showLayer(m.layer,want) } } drawLabels() }
+function zoomClass(){ if(!LM) return; const z=LM.map.getZoom(); ['z6','z9','z11','z12'].forEach(k=>LM.el.classList.toggle(k,z>=+k.slice(1))) }
+
+// rótulos com prevenção de sobreposição
+function drawLabels(){
+  if(!LM||!LM.data.states) return; const map=LM.map, z=map.getZoom(), size=map.getSize(), b=map.getBounds().pad(.05);
+  const boxes=[], out=[];
+  const fits=(x,y,w,h)=>{ if(x<-20||y<-10||x+w>size.x+20||y+h>size.y+10) return false; for(const q of boxes){ if(x<q[0]+q[2]&&x+w>q[0]&&y<q[1]+q[3]&&y+h>q[1]) return false } boxes.push([x,y,w,h]); return true };
+  // marcadores ocupam espaço
+  const ML=[]; const seenK={};
+  allLocais().forEach(({c,l,i})=>{ const p=map.latLngToContainerPoint([l.lat,l.lon]); const key=l.lat.toFixed(3)+'_'+l.lon.toFixed(3); const n=seenK[key]=(seenK[key]||0)+1; const px=p.x+(n-1)*16;
+    const esc_=l.tipo==='escola', sel=mapSel&&mapSel.cid===c.id&&mapSel.i===i; const hb=esc_?7:10; boxes.push([px-hb,p.y-hb,2*hb,2*hb]);
+    const pri=sel?0:(l.minha&&!esc_)?1:esc_?4:3; const show=pri<=1||(esc_?z>=10:z>=6);
+    if(show) ML.push({p:{x:px,y:p.y},txt:l.nome,pri,cls:sel?'msel':pri===1?'mmine':esc_?'mesc':'moth',off:esc_?10:(l.minha?18:13)}) });
+  if(perfil.casa){ const p=map.latLngToContainerPoint([perfil.casa.lat,perfil.casa.lon]); boxes.push([p.x-10,p.y-10,20,20]); ML.push({p,txt:perfil.casa.nome+' · você',pri:2,cls:'mhome',off:12}) }
+  ML.sort((a,b)=>a.pri-b.pri).forEach(m=>{ const fs=m.pri<=1?13:12; const w=m.txt.length*fs*.58+4, h=fs+4; let ok=false;
+    for(const [dx,dy,anc] of [[m.off,-h/2,'r'],[-m.off-w,-h/2,'l'],[-w/2,m.off,'b'],[-w/2,-m.off-h,'t']]){ const x=m.p.x+dx, y=m.p.y+dy; if(fits(x,y,w,h)){ const lp=map.containerPointToLayerPoint([x,y+h/2]); out.push(`<div class="ml ${m.cls}" style="left:${lp.x}px;top:${lp.y}px">${esc(m.txt)}</div>`); ok=true; break } }
+    if(!ok&&m.pri<=1){ const x=m.p.x+m.off, y=m.p.y-h/2; boxes.push([x,y,w,h]); const lp=map.containerPointToLayerPoint([x,m.p.y]); out.push(`<div class="ml ${m.cls}" style="left:${lp.x}px;top:${lp.y}px">${esc(m.txt)}</div>`) } });
+  const add=(lat,lon,txt,cls,fs,dot)=>{ if(!b.contains([lat,lon])) return; const p=map.latLngToContainerPoint([lat,lon]); const w=txt.length*fs*(cls.includes('st')?.68:.56)+(dot?10:0), h=fs+4;
+    const x=dot?p.x-4:p.x-w/2, y=p.y-h/2; if(!fits(x,y,w,h)) return; const lp=map.containerPointToLayerPoint([dot?p.x:p.x,p.y]); out.push(`<div class="gl ${cls}${dot?' dot':''}" style="left:${lp.x}px;top:${lp.y}px">${esc(txt)}</div>`) };
+  // estados
+  if(z<8) LM.data.states.features.forEach(f=>{ const p=f.properties; if(z<5) add(p.ly,p.lx,p.uf,'st sig',11,false); else add(p.ly,p.lx,p.n,'st',z>=6?12:11,false) });
+  // países vizinhos e oceano
+  if(z<6.5){ add(-31,-43,'OCEANO ATLÂNTICO','oc',12,false); }
+  // cidades
+  (LM.data.places||[]).forEach(p=>{ const minZ=p.cap===2?3:p.cap===1&&p.br?4:p.r<=3?5:p.r<=5?6:p.r<=7?7:8; if(z<minZ||(!p.br&&z<5&&p.cap!==2)) return;
+    const cls=p.cap===2?'city cap2':p.cap===1?'city cap1':'city'; add(p.y,p.x,p.n,cls+(p.br?'':' fx'),p.cap?12.5:11.5,true) });
+  // municípios
+  if(z>=9) Object.values(LM.mun).forEach(m=>{ if(!m.data||!LM.map.hasLayer(m.layer)) return; m.data.features.forEach(f=>add(f.properties.ly,f.properties.lx,f.properties.n,'mun',z>=11?12:11,false)) });
+  LM.labelDiv.innerHTML=out.join('');
+}
+
+// marcadores
+function markerIcon(c,l,i){ const col=esc(c.cor||'#0e6e78'); const esc_=l.tipo==='escola'; const sel=mapSel&&mapSel.cid===c.id&&mapSel.i===i; const r=esc_?5:7.5; const S=l.minha&&!esc_?40:esc_?22:28, h=S/2;
+  const halo=l.minha?(esc_?`<circle r="${r*1.75}" fill="none" stroke="${GOLD}" stroke-width="2.2"/>`:`<circle r="${r*2.15}" fill="${GOLD}" fill-opacity=".28" stroke="${GOLD}" stroke-width="2.4"/>`):'';
+  const ring=sel?`<circle r="${r*2.5}" fill="none" stroke="${col}" stroke-width="2.5" opacity=".8"><animate attributeName="r" values="${r*1.9};${r*2.6};${r*1.9}" dur="1.6s" repeatCount="indefinite"/></circle>`:'';
+  return L.divIcon({className:'lmk',html:`<svg width="${S}" height="${S}" viewBox="${-h} ${-h} ${S} ${S}" style="overflow:visible">${ring}${halo}${mkShape(l.tipo,col,r)}</svg>`,iconSize:[S,S],iconAnchor:[h,h]}) }
+function drawMarkers(){
+  if(!LM) return; LM.markers.clearLayers(); LM.line.clearLayers();
+  if(perfil.casa){ L.marker([perfil.casa.lat,perfil.casa.lon],{icon:L.divIcon({className:'lmk',html:`<svg width="26" height="26" viewBox="-13 -13 26 26"><path d="${star(10)}" fill="var(--ink)" stroke="#fff" stroke-width="1.6"/></svg>`,iconSize:[26,26],iconAnchor:[13,13]}),keyboard:false,zIndexOffset:500})
+    .addTo(LM.markers) }
+  const seen={};
+  allLocais().forEach(({c,l,i})=>{ const key=l.lat.toFixed(3)+'_'+l.lon.toFixed(3); const n=seen[key]=(seen[key]||0)+1; const ic=markerIcon(c,l,i); if(n>1){ ic.options.iconAnchor=[ic.options.iconAnchor[0]-(n-1)*16,ic.options.iconAnchor[1]] }
+    const esc_=l.tipo==='escola', sel=mapSel&&mapSel.cid===c.id&&mapSel.i===i;
+    const m=L.marker([l.lat,l.lon],{icon:ic,keyboard:false,riseOnHover:true,zIndexOffset:sel?2000:l.minha&&!esc_?1000:esc_?100:0});
+    m.on('click',ev=>{ L.DomEvent.stopPropagation(ev); mapSel={cid:c.id,i}; render() });
+    m.addTo(LM.markers);
+    if(sel&&perfil.casa){ const d=km(perfil.casa,l); L.polyline([[perfil.casa.lat,perfil.casa.lon],[l.lat,l.lon]],{pane:'pLine',color:c.cor||'#0e6e78',weight:2.2,dashArray:'6 6',opacity:.85,interactive:false}).addTo(LM.line);
+      const mid=[(perfil.casa.lat+l.lat)/2,(perfil.casa.lon+l.lon)/2]; L.tooltip({permanent:true,direction:'center',className:'dist-tip'}).setLatLng(mid).setContent(d.toLocaleString('pt-BR')+' km').addTo(LM.line) } });
+}
+function fitLocais(anim=true){ if(!LM) return; const pts=allLocais().map(({l})=>[l.lat,l.lon]); if(perfil.casa) pts.push([perfil.casa.lat,perfil.casa.lon]); if(!pts.length){ LM.map.setView([-15,-53],4); return } LM.map.flyToBounds(L.latLngBounds(pts),{padding:[50,50],maxZoom:9,duration:anim?.8:0}) }
+function focusLocal(c,i,fromMine){ if(!LM) return; const l=(c.locais||[])[i]; if(!l) return; const mine=(c.locais||[]).filter(x=>x.minha);
+  if(fromMine&&mine.some(x=>x.tipo==='escola')) LM.map.flyToBounds(L.latLngBounds(mine.map(x=>[x.lat,x.lon])),{padding:[40,40],duration:.9});
+  else LM.map.flyTo([l.lat,l.lon],l.tipo==='escola'?14:Math.max(LM.map.getZoom(),9),{duration:.9}) }
+
+function bindMapa(){
+  const slot=document.getElementById('lmapslot'); if(!slot) return;
+  const lm=ensureMap();
+  if(!lm){ slot.innerHTML='<div class="lmapfail">O mapa interativo não carregou (biblioteca Leaflet indisponível). Verifique a conexão e recarregue a página.</div>'; return }
+  slot.appendChild(lm.el); lm.el.classList.toggle('adding',!!mapAdd);
+  setTimeout(()=>{ lm.map.invalidateSize(); if(!mapFirstFit){ mapFirstFit=true; fitLocais(false) } },0);
+  zoomClass(); restyle(); updateLayers(); drawMarkers(); drawLabels();
+  const go=document.getElementById('maGo'); if(go) go.onclick=()=>{ const nome=document.getElementById('maN').value.trim(); if(!nome){ toast('Escreva o nome da cidade'); document.getElementById('maN').focus(); return } mapAdd={cid:document.getElementById('maC').value, tipo:document.getElementById('maT').value, nome, cargo:document.getElementById('maF').value.trim(), minha:document.getElementById('maM').checked}; render() };
+  const hm=document.getElementById('maHome'); if(hm) hm.onclick=()=>{ const nome=(document.getElementById('maN').value.trim())||''; if(!nome){ toast('Escreva o nome da sua cidade no campo “Cidade” e clique de novo'); document.getElementById('maN').focus(); return } mapAdd={home:true,nome}; render() };
+  const cc=document.getElementById('maCancel'); if(cc) cc.onclick=e=>{ e.preventDefault(); mapAdd=null; render() };
+  if(mapAdd){ const c=document.getElementById('maC'); if(c&&mapAdd.cid) c.value=mapAdd.cid }
+  document.querySelectorAll('[data-mz]').forEach(b=>b.onclick=()=>{ const z=b.dataset.mz; if(z==='fit') fitLocais(); else if(z==='br') lm.map.flyTo([-15,-53],4,{duration:.8}); else if(z==='casa'&&perfil.casa) lm.map.flyTo([perfil.casa.lat,perfil.casa.lon],9,{duration:.8}) });
+  document.querySelectorAll('[data-mtheme]').forEach(b=>b.onclick=()=>{ mapTheme=b.dataset.mtheme; try{localStorage.setItem('meus-concursos-tema',mapTheme)}catch(e){} render() });
+  const lb=document.getElementById('mLayBtn'); if(lb) lb.onclick=()=>{ mapLayOpen=!mapLayOpen; document.getElementById('mLayPop').classList.toggle('open',mapLayOpen) };
+  document.querySelectorAll('[data-mlay]').forEach(i=>i.onchange=()=>{ mapLay[i.dataset.mlay]=i.checked; try{localStorage.setItem('meus-concursos-camadas',JSON.stringify(mapLay))}catch(e){} updateLayers(); updateMun(); drawLabels() });
+}
+
+function placeAdd(lon,lat){
+  const a=mapAdd; mapAdd=null; lon=+lon.toFixed(3); lat=+lat.toFixed(3);
+  if(a.home){ perfil={...perfil, casa:{nome:a.nome,lat,lon}}; store.saveConfig&&store.saveConfig(perfil); render(); toast('Sua cidade foi atualizada'); return }
+  const c=items.find(x=>x.id===a.cid); if(!c){ render(); return }
+  const n=clone(c); (n.locais=n.locais||[]).push({nome:a.nome,tipo:a.tipo,cargo:a.cargo,lat,lon,minha:!!a.minha}); mapSel={cid:c.id,i:n.locais.length-1}; saveItem(n); toast('Local adicionado');
+}
+
+
+// ---------- conteúdo ----------
+function hl(text,q){ const e=esc(text); if(!q) return e; const n=q.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); const plain=text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); const i=plain.indexOf(n); if(i<0) return e; return esc(text.slice(0,i))+'<mark>'+esc(text.slice(i,i+q.length))+'</mark>'+esc(text.slice(i+q.length)) }
+const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+function renderConteudo(){
+  if(!items.length) return renderPainel();
+  const list=items.slice().sort((a,b)=>{ const r=x=>x.status==='descartado'?2:(['aprovado','nomeado'].includes(x.status)?1:0); return r(a)-r(b) || String(a.nome).localeCompare(String(b.nome)) });
+  if(!contSel || !items.find(x=>x.id===contSel)) contSel=list[0].id;
+  const c=items.find(x=>x.id===contSel);
+  const picks=list.map(x=>{ const ts=topicStats(x); return `<button class="${x.id===contSel?'on':''}" data-csel="${esc(x.id)}"><span class="dot" style="width:10px;height:10px;border-radius:50%;background:${esc(x.cor||'var(--accent)')}"></span>${esc(x.nome)} <small>${ts.t?Math.round(100*ts.d/ts.t)+'%':'sem conteúdo'}</small></button>` }).join('');
+  const blocks=c.conteudo||[];
+  if(!blocks.length) return `<div class="cpick">${picks}</div><div class="card empty"><h3>Sem conteúdo programático</h3><p>Cole o conteúdo do edital para transformar cada tópico num item que você marca conforme estuda. Ou mande o edital no chat que o Claude cadastra.</p><button class="btn primary" data-cedit="1">Adicionar conteúdo</button></div>`;
+  const ts=topicStats(c), pct=ts.t?Math.round(100*ts.d/ts.t):0;
+  const p=provaEvent(c); const dleft=p&&evState(p)!=='past'?diff(pd(p.inicio)):null;
+  const pend=ts.t-ts.d;
+  const pace = dleft&&dleft>0&&pend>0 ? `<div class="muted">Ritmo para cobrir tudo até a prova: ~${(pend/(dleft/7)).toFixed(1).replace('.',',')} tópicos por semana</div>` : '';
+  const head=`<div class="card chead"><div class="big" style="color:${esc(c.cor||'var(--accent)')}">${pct}%</div>
+    <div class="grow"><b>${esc(c.nome)}</b><div class="muted">${ts.d} de ${ts.t} tópicos estudados${dleft!=null?' · prova '+rel(dleft):''}</div>${pace}<div class="prog" style="margin-top:8px"><i style="width:${pct}%;background:${esc(c.cor||'var(--accent)')}"></i></div></div>
+    <input class="search" id="contSearch" placeholder="Buscar tópico…" value="${esc(contQuery)}">
+    <div style="display:flex;flex-direction:column;gap:4px"><label class="muted" style="display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" id="contPend" ${contPend?'checked':''}> só pendentes</label><label class="muted" style="display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" id="contRefs" ${contRefs?'checked':''}> referências</label></div>
+    <div style="display:flex;gap:6px"><button class="btn sm" data-cexp="1">Expandir tudo</button><button class="btn sm" data-cexp="0">Recolher</button><button class="btn sm" data-cedit="1">✎ Editar</button></div></div>`;
+  const q=contQuery.trim(); const nq=norm(q);
+  let lastG=null, html='';
+  blocks.forEach((b,bi)=>{
+    let tops=(b.topicos||[]).map((t,ti)=>({t,ti}));
+    const matchB = nq && norm(b.materia).includes(nq);
+    if(nq && !matchB) tops=tops.filter(x=>norm(x.t.t).includes(nq) || (x.t.refs||[]).some(r=>norm(r.t).includes(nq)));
+    if(contPend) tops=tops.filter(x=>!x.t.feito);
+    if((nq||contPend) && !tops.length) return;
+    if(b.grupo!==lastG){ const gb=blocks.filter(x=>x.grupo===b.grupo); let gt=0,gd=0; gb.forEach(x=>(x.topicos||[]).forEach(y=>{gt++; if(y.feito) gd++})); html+=`<div class="gtitle"><span>${esc(b.grupo||'Conteúdo')}</span><span>${gd}/${gt}</span></div>`; lastG=b.grupo }
+    const key=c.id+'|'+bi; const open=openBlocks.has(key)||!!nq||contPend;
+    const bp=blockPct(b), done=(b.topicos||[]).filter(x=>x.feito).length;
+    html+=`<div class="card blk ${open?'open':''}"><div class="blkh" data-blk="${esc(key)}"><span class="car">▶</span><b>${hl(b.materia,q)}</b><div class="prog"><i style="width:${bp}%;background:${bp===100?'var(--ok)':'var(--accent)'}"></i></div><span class="n">${done}/${(b.topicos||[]).length}</span></div>
+      ${open?`<div class="tops">${tops.map(x=>{ const id='t'+bi+'_'+x.ti; const refs=(contRefs&&(x.t.refs||[]).length)?`<div class="refs">${x.t.refs.map(r=>`<div class="ref"><span class="rt ${r.tipo==='edital'?'e':'s'}">${r.tipo==='edital'?'Edital':'Sugestão'}</span>${r.url?`<a href="${esc(r.url)}" target="_blank" rel="noopener">${hl(r.t,q)} ↗</a>`:`<span>${hl(r.t,q)}</span>`}</div>`).join('')}</div>`:''; return `<div class="top ${x.t.feito?'done':''}"><input type="checkbox" id="${id}" data-tchk="${bi}|${x.ti}" ${x.t.feito?'checked':''}><div><label for="${id}"><span>${hl(x.t.t,q)}</span></label>${refs}</div></div>` }).join('')}</div>`:''}</div>`;
+  });
+  if(!html) html='<div class="muted" style="padding:20px">Nada encontrado.</div>';
+  const hasRefs=blocks.some(b=>(b.topicos||[]).some(t=>(t.refs||[]).length));
+  const legend=hasRefs&&contRefs?`<div class="legend"><span class="ref"><span class="rt e">Edital</span> norma citada no edital</span><span class="ref"><span class="rt s">Sugestão</span> leitura de apoio (não consta do edital)</span></div>`:'';
+  return `<div class="cpick">${picks}</div>${head}${legend}${html}`;
+}
+function toggleTopic(bi,ti,val){ const c=items.find(x=>x.id===contSel); if(!c) return; const n=clone(c); const t=n.conteudo[bi]&&n.conteudo[bi].topicos[ti]; if(!t) return; t.feito=val; saveItem(n) }
+function contToText(c){ let out='', g=null; (c.conteudo||[]).forEach(b=>{ if(b.grupo&&b.grupo!==g){ out+=(out?'\n':'')+'## '+b.grupo+'\n'; g=b.grupo } out+='# '+b.materia+'\n'; (b.topicos||[]).forEach(t=>{ out+=t.t+'\n'; (t.refs||[]).forEach(r=>{ out+='> '+(r.tipo==='edital'?'[edital] ':'[sugestão] ')+r.t+(r.url?' | '+r.url:'')+'\n' }) }) }); return out }
+function textToCont(txt, old){
+  const prev={}; (old||[]).forEach(b=>(b.topicos||[]).forEach(t=>{ if(t.feito) prev[norm(b.materia)+'|'+norm(t.t)]=true }));
+  const out=[]; let g='', cur=null;
+  txt.split('\n').forEach(raw=>{ const l=raw.trim(); if(!l) return;
+    if(l.startsWith('## ')){ g=l.slice(3).trim(); return }
+    if(l.startsWith('# ')){ cur={id:'b'+out.length, grupo:g, materia:l.slice(2).trim(), topicos:[]}; out.push(cur); return }
+    if(!cur){ cur={id:'b'+out.length, grupo:g, materia:'Geral', topicos:[]}; out.push(cur) }
+    if(l.startsWith('>')){ const last=cur.topicos[cur.topicos.length-1]; if(!last) return; let r=l.replace(/^>\s*/,''); let tipo='sugestao'; const m=r.match(/^\[(edital|sugest[aã]o)\]\s*/i); if(m){ tipo=m[1].toLowerCase()==='edital'?'edital':'sugestao'; r=r.slice(m[0].length) } let url=''; const pi=r.lastIndexOf(' | '); if(pi>0 && /^https?:\/\//.test(r.slice(pi+3).trim())){ url=r.slice(pi+3).trim(); r=r.slice(0,pi) } (last.refs=last.refs||[]).push({t:r.trim(),url,tipo}); return }
+    const t=l.replace(/^[-•*]\s*/,''); cur.topicos.push({t, feito:!!prev[norm(cur.materia)+'|'+norm(t)]}) });
+  return out;
+}
+function openContEditor(){
+  const c=items.find(x=>x.id===contSel); if(!c) return;
+  const layer=document.createElement('div'); layer.className='ovl center'; layer.style.zIndex=60;
+  layer.innerHTML=`<div class="modal"><div class="mhead"><h3>Conteúdo · ${esc(c.nome)}</h3><button class="btn ghost sm" data-c>✕</button></div>
+   <div class="mbody"><div class="hint">Formato: <b>## Grupo</b> numa linha, <b>#&nbsp;Matéria</b> em outra, e cada tópico numa linha abaixo. Referências ficam logo abaixo do tópico, começando com <b>&gt; [edital]</b> ou <b>&gt; [sugestão]</b> (link opcional depois de “ | ”). Tópicos que já estavam marcados continuam marcados se o texto não mudar.</div>
+   <textarea class="notes" id="contTa" style="min-height:420px;font-size:13px" placeholder="## Conhecimentos gerais\n# Direito administrativo\nPrincípios do art. 37\nAtos administrativos">${esc(contToText(c))}</textarea></div>
+   <div class="mfoot"><button class="btn" data-c>Cancelar</button><button class="btn primary" id="contSave">Salvar conteúdo</button></div></div>`;
+  document.body.appendChild(layer);
+  const close=()=>layer.remove();
+  layer.querySelectorAll('[data-c]').forEach(b=>b.onclick=close); layer.addEventListener('mousedown',e=>{ if(e.target===layer) close() });
+  layer.querySelector('#contSave').onclick=()=>{ const n=clone(c); n.conteudo=textToCont(layer.querySelector('#contTa').value, c.conteudo); close(); saveItem(n); toast('Conteúdo salvo') };
+}
+
+// ---------- drawer ----------
+let drawerTab='geral', refFilter='todas', qMat='todas', qShow='todas', qPick={}, qRot={}, qRev={}, qGab={}, qView='ineditas';
+const QB={};
+function loadQB(id){ if(QB[id]) return; QB[id]={loading:true}; fetch('q/'+id+'.json').then(r=>r.ok?r.json():null).then(d=>{ QB[id]=d||{none:true}; if(openId===id){ const c=items.find(x=>x.id===id); if(c) renderDrawer(c) } }).catch(()=>{ QB[id]={none:true} }) }
+function openDrawer(id){ if(openId!==id){ drawerTab='geral'; refFilter='todas'; qMat='todas'; qShow='todas' } openId=id; const c=items.find(x=>x.id===id); if(c) renderDrawer(c) }
+function closeLayer(){ openId=null; $('#layer').innerHTML='' }
+const refKey=t=>norm(t).replace(/\s*\((?:está|não está|nao esta)[^)]*\)\s*$/,'').replace(/[^a-z0-9]+/g,' ').trim();
+function refSheet(c){
+  const C=c.conteudo||[]; if(!C.length) return `<section class="card sec"><div class="muted">Este concurso ainda não tem conteúdo programático cadastrado. Quando o edital sair, envie o PDF no chat para eu organizar os tópicos e as referências aqui.</div></section>`;
+  let ne=0, ns=0, nt=0; C.forEach(b=>(b.topicos||[]).forEach(t=>{ nt++; (t.refs||[]).forEach(r=>r.tipo==='edital'?ne++:ns++) }));
+  const fil=r=>refFilter==='todas'||(refFilter==='edital'?r.tipo==='edital':r.tipo!=='edital');
+  let g=null, html='';
+  C.forEach((b,bi)=>{ if(b.grupo&&b.grupo!==g){ html+=`<div class="rs-g">${esc(b.grupo)}</div>`; g=b.grupo }
+    const d=(b.topicos||[]).filter(x=>x.feito).length;
+    html+=`<div class="rs-m"><div class="rs-mh"><span class="rs-n">${bi+1}</span><b>${esc(b.materia)}</b><small class="muted">${d}/${(b.topicos||[]).length} estudados</small></div>`;
+    (b.topicos||[]).forEach((t,ti)=>{ const refs=(t.refs||[]).filter(fil);
+      html+=`<div class="rs-t ${t.feito?'done':''}"><label class="rs-th"><input type="checkbox" data-dtchk="${bi}|${ti}" ${t.feito?'checked':''}><span class="rs-tn">${bi+1}.${ti+1}</span><span>${esc(t.t)}</span></label>`+
+        (refs.length?`<ol class="rs-refs">${refs.map(r=>`<li><span class="rtag ${r.tipo==='edital'?'ed':'sg'}">${r.tipo==='edital'?'Edital':'Sugestão'}</span>${r.url?`<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.t)} ↗</a>`:esc(r.t)}</li>`).join('')}</ol>`:`<div class="rs-none">${(t.refs||[]).length?'Sem referências neste filtro.':'Sem referência indicada.'}</div>`)+`</div>` });
+    html+='</div>' });
+  return `<section class="card sec rsheet"><div class="rs-top"><div><h4 style="margin:0">Folha de referências por tópico</h4><div class="muted" style="font-size:13px;margin-top:4px">${C.length} matérias · ${nt} tópicos · ${ne} indicações do edital · ${ns} sugestões</div></div>
+    <div class="rs-act"><div class="seg">${[['todas','Todas'],['edital','Só edital'],['sugestao','Só sugestões']].map(([k,l])=>`<button data-rf="${k}" class="${refFilter===k?'on':''}">${l}</button>`).join('')}</div><button class="btn sm" data-rcopy="folha">Copiar folha</button></div></div>${html}</section>`;
+}
+function biblio(c){
+  const M=new Map(); (c.conteudo||[]).forEach((b,bi)=>(b.topicos||[]).forEach((t,ti)=>(t.refs||[]).forEach(r=>{ const k=refKey(r.t); let e=M.get(k); if(!e){ e={t:r.t,url:r.url,tipo:r.tipo,where:[],mats:new Set()}; M.set(k,e) } if(r.tipo==='edital') e.tipo='edital'; if(!e.url&&r.url) e.url=r.url; if(r.t.length<e.t.length) e.t=r.t; e.where.push((bi+1)+'.'+(ti+1)); e.mats.add(b.materia) })));
+  return [...M.values()].sort((a,b)=>norm(a.t).localeCompare(norm(b.t)));
+}
+function biblioSheet(c){
+  const L=biblio(c); if(!L.length) return `<section class="card sec"><div class="muted">Nenhuma referência cadastrada ainda.</div></section>`;
+  const sec=(tit,arr,cls)=>arr.length?`<div class="rs-g">${tit} <span class="muted">· ${arr.length}</span></div><ol class="bib">${arr.map(e=>`<li><span class="rtag ${cls}">${cls==='ed'?'Edital':'Sugestão'}</span><div>${e.url?`<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.t)} ↗</a>`:esc(e.t)}<div class="bib-w">${e.where.length>1?'Tópicos':'Tópico'} ${e.where.join(', ')} · ${esc([...e.mats].join(' / '))}</div></div></li>`).join('')}</ol>`:'';
+  const ed=L.filter(e=>e.tipo==='edital'), sg=L.filter(e=>e.tipo!=='edital');
+  const top=L.slice().sort((a,b)=>b.where.length-a.where.length).filter(e=>e.where.length>1).slice(0,5);
+  return `<section class="card sec rsheet"><div class="rs-top"><div><h4 style="margin:0">Bibliografia consolidada</h4><div class="muted" style="font-size:13px;margin-top:4px">${L.length} obras sem repetição, em ordem alfabética, com os tópicos onde cada uma aparece</div></div><div class="rs-act"><button class="btn sm" data-rcopy="bib">Copiar bibliografia</button></div></div>
+    ${top.length?`<div class="bib-top"><b>Mais citadas no programa</b>${top.map(e=>`<div><span>${esc(e.t)}</span><small>${e.where.length} tópicos</small></div>`).join('')}</div>`:''}
+    ${sec('Indicadas pelo edital',ed,'ed')}${sec('Sugestões (fora do edital)',sg,'sg')}</section>`;
+}
+function topicName(c,t){ const [a,b]=String(t).split('.').map(Number); const blk=(c.conteudo||[])[a-1]; const tp=blk&&(blk.topicos||[])[b-1]; return {mat:blk?blk.materia:'',top:tp?tp.t:''} }
+function realSheet(c,B){
+  const R=c.qres||{}; const P=(B.reais||[]);
+  const inMat=it=>qMat==='todas'||String(it.t).split('.')[0]===qMat;
+  let tot=0, feitas=0;
+  const blocks=P.map(p=>{ const its=p.itens.filter(inMat); tot+=its.length; feitas+=its.filter(it=>R['r:'+p.id+':'+it.n]!=null).length;
+    if(!its.length&&p.itens.length) return '';
+    const show=qGab[p.id];
+    return `<div class="rp"><div class="rp-h"><span class="rtag ${['FGV','VUNESP','Quadrix'].includes(p.banca)?'ed':'sg'}">${esc(p.banca)}${p.ano?' '+p.ano:''}</span><b>${esc(p.t)}</b></div>
+      <div class="rp-l"><a href="${esc(p.url)}" target="_blank" rel="noopener">Abrir caderno da prova ↗</a>${p.gab?` · <a href="${esc(p.gab)}" target="_blank" rel="noopener">gabarito oficial ↗</a>`:p.gabpage?` · <a href="${esc(p.gabpage)}" target="_blank" rel="noopener">página com o gabarito ↗</a>`:''}${p.itens.some(i=>i.g)?` · <button class="qver" data-qgab="${esc(p.id)}">${show?'esconder':'mostrar'} gabarito</button>`:''}</div>
+      ${p.nota?`<div class="bib-w">${esc(p.nota)}</div>`:''}
+      ${its.length?`<table class="rtab"><thead><tr><th>Questão</th><th>Tópico</th><th>Tema</th>${p.itens.some(i=>i.g)?'<th>Gab.</th>':''}<th>Seu resultado</th></tr></thead><tbody>${its.map(it=>{ const k='r:'+p.id+':'+it.n, r=R[k];
+        return `<tr class="${r===1?'rok':r===0?'rerr':''}"><td><b>${esc(String(it.n))}</b></td><td>${it.t!=='—'?esc(it.t):'—'}</td><td>${esc(it.tema)}</td>${p.itens.some(i=>i.g)?`<td>${it.g?(show?`<b>${esc(it.g)}</b>`:'<span class="gh">•</span>'):'—'}</td>`:''}<td class="rres"><button data-rr="${esc(k)}|1" class="${r===1?'on':''}" title="Acertei">✓</button><button data-rr="${esc(k)}|0" class="${r===0?'on bad':''}" title="Errei">✗</button></td></tr>` }).join('')}</tbody></table>`:'<div class="muted" style="font-size:13px;margin-top:6px">Sem questões mapeadas: use o caderno inteiro.</div>'}</div>` }).join('');
+  return `<div class="qnote">Questões de provas reais, mapeadas pelo tópico do seu edital. O enunciado fica no caderno da banca: abra o link, resolva a questão indicada e confira o gabarito aqui. Os números foram levantados por leitura automatizada dos cadernos, então confira o número no próprio caderno se algo não bater. ${tot?`<b>${feitas} de ${tot}</b> marcadas como feitas${qMat!=='todas'?' nesta matéria':''}.`:''}</div>${blocks||'<div class="muted" style="margin-top:12px">Nenhuma questão real mapeada nesta matéria.</div>'}`;
+}
+function qSheet(c){
+  loadQB(c.id); const B=QB[c.id];
+  if(!B||B.loading) return `<section class="card sec"><div class="muted">Carregando o banco de questões…</div></section>`;
+  if(B.none||!(B.questoes||[]).length) return `<section class="card sec"><div class="muted">Ainda não há banco de questões para este concurso. Peça no chat que eu monte um a partir do conteúdo programático.</div></section>`;
+  const R=c.qres||{}; const Qs=B.questoes;
+  const mats=[...new Set(Qs.map(q=>String(q.t).split('.')[0]))];
+  const resp=Qs.filter(q=>R[q.id]!=null).length, ok=Qs.filter(q=>R[q.id]===1).length;
+  const per=mats.map(m=>{ const qq=Qs.filter(q=>String(q.t).split('.')[0]===m); const r=qq.filter(q=>R[q.id]!=null); const k=r.filter(q=>R[q.id]===1).length; return {m,n:qq.length,r:r.length,k,name:m!=='—'?topicName(c,m+'.1').mat:'Geografia e ensino'} });
+  const list=Qs.filter(q=>(qMat==='todas'||String(q.t).split('.')[0]===qMat)&&(qShow==='todas'||(qShow==='nao'?R[q.id]==null:R[q.id]===0)));
+  const prov=(B.provas||[]).length?`<div class="qprov"><b>Provas reais para treinar</b>${B.provas.map(p=>`<div class="qp"><span class="rtag ${p.banca==='FGV'||p.banca==='VUNESP'||p.banca==='Quadrix'?'ed':'sg'}">${esc(p.banca)}</span><div><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.t)} ↗</a>${p.gab?` · <a href="${esc(p.gab)}" target="_blank" rel="noopener">gabarito ↗</a>`:''}<div class="bib-w">${esc(p.nota||'')}</div></div></div>`).join('')}</div>`:'';
+  const card=(q,idx)=>{ const tn=topicName(c,q.t); const r=R[q.id]; const pick=qPick[q.id]; const done=r!=null;
+    let body='';
+    const rev=done||qRev[q.id];
+    if(q.tipo==='me'){ body=`<div class="qalts">${q.alts.map((a,i)=>{ let cls=''; if(rev){ if(i===q.gab) cls='ok'; else if(done&&pick===i) cls='bad' } return `<button class="qalt ${cls}" data-qa="${esc(q.id)}|${i}" ${done?'disabled':''}><b>${'ABCDE'[i]}</b><span>${esc(a)}</span></button>` }).join('')}</div>` }
+    else if(q.tipo==='ce'){ body=`<div class="qce">${[[true,'Certo'],[false,'Errado']].map(([v,l])=>{ let cls=''; if(rev){ if(v===q.gab) cls='ok'; else if(done&&pick===v) cls='bad' } return `<button class="qalt ${cls}" data-qce="${esc(q.id)}|${v?1:0}" ${done?'disabled':''}><b>${l[0]}</b><span>${l}</span></button>` }).join('')}</div>` }
+    else { body=`<textarea class="notes qta" placeholder="Escreva aqui o esqueleto da sua resposta (introdução, argumentos, autores, conclusão). Este rascunho não é salvo."></textarea><details class="qdet"><summary>Ver resposta comentada</summary>${q.modelo?`<div class="qmod"><b>Resposta-modelo</b><p>${esc(q.modelo)}</p></div>`:''}<b class="qsub">Roteiro: o que a banca espera</b><ul class="qrot">${(q.rot||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="bib-w" style="margin-top:6px">Referências do edital: ${esc(q.ref||'')}</div></details><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center">${done?'<span class="muted" style="font-size:12.5px">✓ treinada</span>':`<button class="btn sm" data-qdone="${esc(q.id)}">Marcar como treinada</button>`}<span class="muted" style="font-size:12.5px">Tempo sugerido: ${esc(q.tempo||'')}</span></div>` }
+    const gabTxt=q.tipo==='ce'?(q.gab?'Certo':'Errado'):q.tipo==='me'?'ABCDE'[q.gab]+') '+q.alts[q.gab]:'';
+    const fb=rev&&q.tipo!=='disc'?`<div class="qfb ${done?(r===1?'ok':'bad'):'neu'}">${done?`<div class="qres">${r===1?'✓ Você acertou.':'✗ Você errou.'}</div>`:''}<div class="qgab"><span>Resposta correta</span><b>${esc(gabTxt)}</b></div><div class="qexp"><span>Por que</span><p>${esc(q.com)}</p></div><div class="bib-w">Base: ${esc(q.ref||'')}</div>${(q.fontes||[]).length?`<div class="qsrc">Fonte: ${q.fontes.map(f=>`<a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.t)} ↗</a>`).join(' · ')}</div>`:''}<div class="bib-w" style="margin-top:4px">Questão inédita, elaborada a partir da fonte acima${q.estilo?' no estilo '+esc(q.estilo):''}.</div></div>`:(q.tipo!=='disc'?`<button class="qver" data-qver="${esc(q.id)}">Ver resposta comentada</button>`:'');
+    return `<div class="qcard ${done?(r===1?'qok':'qerr'):''}"><div class="qhead"><span class="qn">${idx+1}</span><span class="rtag ed">${q.t!=='—'?'Tópico '+esc(q.t):'Geografia'}</span><span class="qmat">${esc(tn.mat||'')}</span><span class="qest">${esc(q.estilo||'')}${q.dif?' · '+esc(q.dif):''}</span>${done?`<button class="qredo" data-qredo="${esc(q.id)}" title="Responder de novo">↺ refazer</button>`:''}</div>
+      ${tn.top?`<div class="qtop">${esc(tn.top.length>150?tn.top.slice(0,150)+'…':tn.top)}</div>`:''}<div class="qen">${esc(q.enun).replace(/\n/g,'<br>')}</div>${body}${fb}</div>` };
+  return `<section class="card sec rsheet"><div class="rs-top"><div><h4 style="margin:0">Banco de questões</h4><div class="muted" style="font-size:13px;margin-top:4px">${Qs.length} questões · ${resp} respondidas · ${resp?Math.round(100*ok/resp)+'% de acerto':'nenhuma resposta ainda'}</div></div>
+    <div class="rs-act"><select class="sel" id="qMatSel"><option value="todas">Todas as matérias</option>${per.map(p=>`<option value="${esc(p.m)}" ${qMat===p.m?'selected':''}>${p.m!=='—'?esc(p.m)+'. ':''}${esc(p.name)} (${p.n})</option>`).join('')}</select>
+    <div class="seg">${[['todas','Todas'],['nao','Não respondidas'],['err','Errei']].map(([k,l])=>`<button data-qshow="${k}" class="${qShow===k?'on':''}">${l}</button>`).join('')}</div></div></div>
+    ${(B.reais||[]).length?`<div class="seg" style="margin-top:12px">${[['ineditas','Questões inéditas ('+Qs.length+')'],['reais','Questões de provas reais ('+B.reais.reduce((a,p)=>a+p.itens.length,0)+')']].map(([k,l])=>`<button data-qview="${k}" class="${qView===k?'on':''}">${l}</button>`).join('')}</div>`:''}
+    ${qView==='reais'&&(B.reais||[]).length?realSheet(c,B):`<div class="qnote">${esc(B.nota||'')}</div>
+    ${resp?`<div class="qstats">${per.filter(p=>p.r).map(p=>`<div><span>${p.m!=='—'?esc(p.m)+'. ':''}${esc(p.name)}</span><div class="prog"><i style="width:${Math.round(100*p.k/p.r)}%"></i></div><small>${p.k}/${p.r}</small></div>`).join('')}</div>`:''}
+    ${(B.reais||[]).length?'':prov}
+    ${list.map((q)=>card(q,Qs.indexOf(q))).join('')||'<div class="muted" style="margin-top:14px">Nenhuma questão neste filtro.</div>'}`}</section>`;
+}
+function sheetText(c,kind){
+  if(kind==='bib'){ const L=biblio(c); const f=a=>a.map(e=>'- '+e.t+(e.url?' ('+e.url+')':'')+'  [tópicos '+e.where.join(', ')+']').join('\n');
+    return c.nome+' — Bibliografia\n\nINDICADAS PELO EDITAL\n'+f(L.filter(e=>e.tipo==='edital'))+'\n\nSUGESTÕES\n'+f(L.filter(e=>e.tipo!=='edital')) }
+  let out=c.nome+' — Referências por tópico\n', g=null;
+  (c.conteudo||[]).forEach((b,bi)=>{ if(b.grupo&&b.grupo!==g){ out+='\n'+b.grupo.toUpperCase()+'\n'; g=b.grupo } out+='\n'+(bi+1)+'. '+b.materia+'\n';
+    (b.topicos||[]).forEach((t,ti)=>{ out+='  '+(bi+1)+'.'+(ti+1)+' '+t.t+'\n'; (t.refs||[]).forEach(r=>{ out+='      • '+(r.tipo==='edital'?'[Edital] ':'[Sugestão] ')+r.t+(r.url?' ('+r.url+')':'')+'\n' }) }) });
+  return out }
+function renderDrawer(c){
+  const layer=$('#layer');
+  const prevScroll = layer.querySelector('.drawer')?.scrollTop||0;
+  const active = document.activeElement && document.activeElement.id==='notesTa';
+  if(active) return; // don't clobber typing
+  const s=st(c.status), p=provaEvent(c), ins=inscricaoEvent(c), pct=studyPct(c);
+  const facts=[['Órgão',c.orgao],['Banca',c.banca],['Cargo',c.cargo],['Ênfase / área',c.enfase],['Salário inicial',c.salario?money(c.salario):''],['Benefícios',c.beneficios],
+    ['Vagas',c.vagas?(c.vagas+(c.vagasTotal?' (de '+c.vagasTotal+' no total)':'')+(c.cadastroReserva?' + cadastro reserva':'')):''],['Requisito',c.requisitos],['Regime',c.regime],['Jornada',c.jornada],
+    ['Lotação',c.lotacao],['Local da prova',c.localProva],['Taxa de inscrição',c.taxa?money(c.taxa):''],['Validade',c.validade]]
+    .filter(f=>f[1]).map(f=>`<div><span>${f[0]}</span><b>${esc(f[1])}</b></div>`).join('');
+  const cnt=[]; if(ins){const sI=evState(ins); cnt.push(sI==='future'?[rel(diff(pd(ins.inicio))),'para abrir as inscrições']:sI==='now'?[diff(pd(ins.fim||ins.inicio))+' dias','para o fim das inscrições']:['Encerradas','inscrições'])}
+  if(p&&evState(p)!=='past') cnt.push([diff(pd(p.inicio))+' dias','até a prova ('+fd(p.inicio)+')']);
+  if(pct!=null) cnt.push([pct+'%','da preparação']);
+  // timeline
+  const evs=sortedEvents(c); let tl='', placed=false; const t=today();
+  evs.forEach(e=>{ const sE=evState(e); if(!placed && pd(e.inicio)>t && sE!=='now'){ tl+='<div class="todayline">hoje</div>'; placed=true }
+    const T=tp(e.tipo); const i=(c.eventos||[]).indexOf(e);
+    tl+=`<div class="tli ${e.feito||sE==='past'?'past':''} ${sE==='now'&&!e.feito?'now':''}"><input type="checkbox" data-evchk="${i}" ${e.feito?'checked':''} title="Marcar como feito"><span class="dt">${frange(e)}</span><span class="tt">${esc(e.titulo)}</span><span class="tg" style="background:${T.c}">${T.l}</span></div>` });
+  if(!placed && evs.length) tl+='<div class="todayline">hoje</div>';
+  const etapas=etapasHtml(c);
+  let lastG=null; const mats=(c.materias||[]).map((m,i)=>{ let g=''; if(m.grupo&&m.grupo!==lastG){g=`<div class="g" style="margin-top:${lastG===null?0:10}px">${esc(m.grupo)}</div>`;lastG=m.grupo}
+    return g+`<div class="mat"><span>${esc(m.nome)}</span><input type="range" min="0" max="100" step="5" value="${Number(m.progresso)||0}" data-mat="${i}"><b data-matv="${i}" style="text-align:right">${Number(m.progresso)||0}%</b></div>` }).join('');
+  const links=[c.link?`<a class="btn sm" href="${esc(c.link)}" target="_blank" rel="noopener">Página do concurso ↗</a>`:'',c.linkEdital?`<a class="btn sm" href="${esc(c.linkEdital)}" target="_blank" rel="noopener">Edital ↗</a>`:''].join('');
+  const statusOpts=STATUS.map(x=>`<option value="${x.k}" ${x.k===c.status?'selected':''}>${x.l}</option>`).join('');
+  layer.innerHTML=`<div class="ovl" data-close="1"><aside class="drawer">
+    <div class="dhead"><div class="stripe" style="background:${esc(c.cor||'var(--accent)')}"></div>
+      <div class="row"><span class="muted">${esc(c.orgao||'')}</span><button class="btn ghost sm" data-close="1">✕ Fechar</button></div>
+      <h2>${esc(c.nome)}</h2><div class="sub">${esc([c.cargo,c.enfase].filter(Boolean).join(' · '))}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center">
+        <select class="sel" id="stSel" style="border-color:${s.c}">${statusOpts}</select>
+        <select class="sel" id="prSel">${Object.entries(PRIOR).map(([k,l])=>`<option value="${k}" ${c.prioridade===k?'selected':''}>Prioridade ${l.toLowerCase()}</option>`).join('')}</select>
+        ${links}
+      </div>
+      ${cnt.length?`<div class="countbig">${cnt.map(x=>`<div><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join('')}</div>`:''}
+      <div class="dtabs">${[['geral','Visão geral'],['refs','Conteúdo e referências'],['bib','Bibliografia'],['quest','Questões']].map(([k,l])=>`<button data-dtab="${k}" class="${drawerTab===k?'on':''}">${l}${k==='refs'&&c.conteudo&&c.conteudo.length?` <small>${topicStats(c).t}</small>`:k==='bib'&&c.conteudo&&c.conteudo.length?` <small>${biblio(c).length}</small>`:''}</button>`).join('')}</div>
+    </div>
+    ${drawerTab==='refs'?`<div class="dbody">${refSheet(c)}</div>`:drawerTab==='bib'?`<div class="dbody">${biblioSheet(c)}</div>`:drawerTab==='quest'?`<div class="dbody">${qSheet(c)}</div>`:''}
+    <div class="dbody" ${drawerTab!=='geral'?'style="display:none"':''}>
+      ${facts?`<section class="card sec"><h4>Informações</h4><div class="facts">${facts}</div></section>`:''}
+      <section class="card sec"><h4>Cronograma <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:500">marque o que já foi feito</span></h4><div class="tl">${tl||'<div class="muted">Nenhuma data cadastrada. Use “Editar” para adicionar.</div>'}</div></section>
+      ${(c.materiais&&c.materiais.length)?`<section class="card sec"><h4>Meus materiais</h4><div class="mat-links">${c.materiais.map(m=>matCard(m)).join('')}</div></section>`:''}
+      ${etapas?`<section class="card sec"><h4>Etapas, prazos e recomendações</h4>${etapas}</section>`:''}
+      ${(c.conteudo&&c.conteudo.length)?`<section class="card sec"><h4>Conteúdo programático <span style="display:flex;gap:6px"><button class="btn sm" data-dtab="refs" style="text-transform:none;letter-spacing:0">Ver referências por tópico</button><button class="btn sm" data-act="cont" style="text-transform:none;letter-spacing:0">Abrir na aba Conteúdo →</button></span></h4>${c.conteudo.map(b=>`<div class="mat" style="grid-template-columns:1fr 150px 44px"><span>${esc(b.materia)}</span><div class="prog"><i style="width:${blockPct(b)}%"></i></div><b style="text-align:right">${blockPct(b)}%</b></div>`).join('')}<div class="muted" style="margin-top:8px">${topicStats(c).d} de ${topicStats(c).t} tópicos estudados · ${pct}% no geral</div></section>`:''}
+      ${mats&&!(c.conteudo&&c.conteudo.length)?`<section class="card sec"><h4>Matérias e progresso <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:500">${pct}% no geral</span></h4>${mats}</section>`:''}
+      <section class="card sec"><h4>Anotações <span class="saved" id="savedNote"></span></h4><textarea class="notes" id="notesTa" placeholder="Estratégia, pontos fortes e fracos, links de material…">${esc(c.notas||'')}</textarea></section>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn primary" data-act="edit">✎ Editar</button>
+        <button class="btn" data-act="dup">⧉ Duplicar (outro cargo)</button>
+        <button class="btn danger" data-act="del" style="margin-left:auto">Excluir</button>
+      </div>
+    </div></aside></div>`;
+  const dr=layer.querySelector('.drawer'); dr.scrollTop=prevScroll;
+  dr.addEventListener('click',ev=>ev.stopPropagation());
+  dr.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',closeLayer));
+  layer.querySelector('.ovl').addEventListener('click',e=>{ if(e.target.classList.contains('ovl')) closeLayer() });
+  $('#stSel').onchange=e=>{ const n=clone(c); n.status=e.target.value; saveItem(n); toast('Status atualizado') };
+  $('#prSel').onchange=e=>{ const n=clone(c); n.prioridade=e.target.value; saveItem(n) };
+  dr.querySelectorAll('[data-etgo]').forEach(a=>a.onclick=e=>{ e.preventDefault(); const el=dr.querySelector('#et'+a.dataset.etgo); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}) });
+  dr.querySelectorAll('[data-etchk]').forEach(b=>b.onchange=()=>{ const [ei,ci]=b.dataset.etchk.split('|').map(Number); const n=clone(c); if(n.etapas[ei]&&n.etapas[ei].check&&n.etapas[ei].check[ci]){ n.etapas[ei].check[ci].feito=b.checked; saveItem(n) } });
+  dr.querySelectorAll('[data-etplan]').forEach(b=>b.onchange=()=>{ const [ei,ci]=b.dataset.etplan.split('|').map(Number); const n=clone(c); if(n.etapas[ei]&&n.etapas[ei].plano&&n.etapas[ei].plano[ci]){ n.etapas[ei].plano[ci].feito=b.checked; saveItem(n) } });
+  dr.querySelectorAll('[data-dtab]').forEach(b=>b.onclick=()=>{ drawerTab=b.dataset.dtab; dr.scrollTop=0; renderDrawer(c); layer.querySelector('.drawer').scrollTop=0 });
+  const setQ=(qid,val)=>{ const n=clone(c); n.qres={...(n.qres||{})}; if(val==null) delete n.qres[qid]; else n.qres[qid]=val; saveItem(n) };
+  dr.querySelectorAll('[data-qa]').forEach(b=>b.onclick=()=>{ const [qid,i]=b.dataset.qa.split('|'); const q=(QB[c.id].questoes||[]).find(x=>x.id===qid); qPick[qid]=+i; setQ(qid,+i===q.gab?1:0) });
+  dr.querySelectorAll('[data-qce]').forEach(b=>b.onclick=()=>{ const [qid,v]=b.dataset.qce.split('|'); const q=(QB[c.id].questoes||[]).find(x=>x.id===qid); qPick[qid]=v==='1'; setQ(qid,(v==='1')===q.gab?1:0) });
+  dr.querySelectorAll('[data-qredo]').forEach(b=>b.onclick=()=>{ const qid=b.dataset.qredo; delete qPick[qid]; delete qRev[qid]; setQ(qid,null) });
+  dr.querySelectorAll('[data-qdone]').forEach(b=>b.onclick=()=>setQ(b.dataset.qdone,1));
+  dr.querySelectorAll('[data-qview]').forEach(b=>b.onclick=()=>{ qView=b.dataset.qview; renderDrawer(c) });
+  dr.querySelectorAll('[data-qgab]').forEach(b=>b.onclick=()=>{ qGab[b.dataset.qgab]=!qGab[b.dataset.qgab]; renderDrawer(c) });
+  dr.querySelectorAll('[data-rr]').forEach(b=>b.onclick=()=>{ const i=b.dataset.rr.lastIndexOf('|'); const k=b.dataset.rr.slice(0,i), v=+b.dataset.rr.slice(i+1); const cur=(c.qres||{})[k]; setQ(k,cur===v?null:v) });
+  dr.querySelectorAll('[data-qver]').forEach(b=>b.onclick=()=>{ qRev[b.dataset.qver]=true; renderDrawer(c) });
+  dr.querySelectorAll('[data-qrot]').forEach(b=>b.onclick=()=>{ qRot[b.dataset.qrot]=!qRot[b.dataset.qrot]; renderDrawer(c) });
+  dr.querySelectorAll('[data-qshow]').forEach(b=>b.onclick=()=>{ qShow=b.dataset.qshow; renderDrawer(c) });
+  const qms=dr.querySelector('#qMatSel'); if(qms) qms.onchange=()=>{ qMat=qms.value; renderDrawer(c) };
+  dr.querySelectorAll('[data-rf]').forEach(b=>b.onclick=()=>{ refFilter=b.dataset.rf; renderDrawer(c) });
+  dr.querySelectorAll('[data-dtchk]').forEach(i=>i.onchange=()=>{ const [bi,ti]=i.dataset.dtchk.split('|').map(Number); const n=clone(c); const t=n.conteudo[bi]&&n.conteudo[bi].topicos[ti]; if(!t) return; t.feito=i.checked; saveItem(n) });
+  dr.querySelectorAll('[data-rcopy]').forEach(b=>b.onclick=async()=>{ const txt=sheetText(c,b.dataset.rcopy); try{ await navigator.clipboard.writeText(txt); toast('Copiado — cole no Word ou no Docs') }catch(e){ toast('Não foi possível copiar neste navegador') } });
+  dr.querySelectorAll('[data-evchk]').forEach(ch=>ch.onchange=()=>{ const n=clone(c); n.eventos[+ch.dataset.evchk].feito=ch.checked; saveItem(n) });
+  dr.querySelectorAll('[data-mat]').forEach(r=>{ r.oninput=()=>{ dr.querySelector(`[data-matv="${r.dataset.mat}"]`).textContent=r.value+'%' };
+    r.onchange=()=>{ const n=clone(c); n.materias[+r.dataset.mat].progresso=Number(r.value); saveItem(n) } });
+  const ta=$('#notesTa'); let nt;
+  const saveNotes=()=>{ clearTimeout(nt); const cur=items.find(x=>x.id===c.id); if(!cur||cur.notas===ta.value) return; const n=clone(cur); n.notas=ta.value; saveItem(n); const sv=$('#savedNote'); if(sv){sv.textContent='salvo'; setTimeout(()=>{ if($('#savedNote')) $('#savedNote').textContent='' },1500)} };
+  ta.oninput=()=>{ clearTimeout(nt); nt=setTimeout(()=>{ saveNotes() },1200) };
+  ta.onblur=saveNotes;
+  dr.querySelector('[data-act=edit]').onclick=()=>openForm(c);
+  const ca=dr.querySelector('[data-act=cont]'); if(ca) ca.onclick=()=>{ view='conteudo'; contSel=c.id; closeLayer(); render(); window.scrollTo(0,0) };
+  dr.querySelector('[data-act=dup]').onclick=()=>{ const n=clone(c); n.id=uid()+'-'+Date.now().toString(36); n.nome=c.nome+' (cópia)'; n.enfase=''; n.vagas=''; n.status='interessado'; (n.materias||[]).forEach(m=>m.progresso=0); openForm(n,true) };
+  dr.querySelector('[data-act=del]').onclick=()=>confirmBox(`Excluir “${c.nome}”?`,'Isso remove o concurso, o cronograma e as anotações.',async()=>{ const id=c.id; closeLayer(); items=items.filter(x=>x.id!==id); render(); await store.remove(id); toast('Concurso excluído') });
+}
+
+function confirmBox(title,text,onOk){
+  const wrap=document.createElement('div'); wrap.className='ovl center'; wrap.style.zIndex=70;
+  wrap.innerHTML=`<div class="modal confirm"><div class="mbody"><h3 style="margin:0;font-family:var(--serif);font-size:22px">${esc(title)}</h3><p style="margin:0;color:var(--ink2)">${esc(text)}</p></div><div class="mfoot"><button class="btn" data-no>Cancelar</button><button class="btn primary" data-ok style="background:var(--danger);border-color:var(--danger);color:#fff">Excluir</button></div></div>`;
+  document.body.appendChild(wrap);
+  wrap.querySelector('[data-no]').onclick=()=>wrap.remove();
+  wrap.onclick=e=>{ if(e.target===wrap) wrap.remove() };
+  wrap.querySelector('[data-ok]').onclick=()=>{ wrap.remove(); onOk() };
+}
+
+// ---------- form ----------
+function blank(){ return {id:'c-'+uid()+Date.now().toString(36), nome:'', orgao:'', banca:'', cargo:'', enfase:'', salario:'', beneficios:'', vagas:'', vagasTotal:'', cadastroReserva:false,
+  requisitos:'', regime:'', jornada:'', lotacao:'', localProva:'', taxa:'', validade:'', link:'', linkEdital:'', status:'interessado', prioridade:'media', cor:CORES[Math.floor(Math.random()*CORES.length)],
+  eventos:[{titulo:'Inscrições',inicio:'',fim:'',tipo:'inscricao',feito:false},{titulo:'Prova objetiva',inicio:'',fim:'',tipo:'prova',feito:false}], etapas:[], materias:[], notas:'', criado:new Date().toISOString()} }
+
+function openForm(src, isNew){
+  const c = src ? clone(src) : blank(); const creating = isNew || !src;
+  c.eventos=c.eventos||[]; c.etapas=c.etapas||[]; c.materias=c.materias||[];
+  const layer=document.createElement('div'); layer.className='ovl center'; layer.style.zIndex=60;
+  const inp=(k,l,cls='',type='text',ph='')=>`<div class="f ${cls}"><label>${l}</label><input type="${type}" name="${k}" value="${esc(c[k]??'')}" placeholder="${esc(ph)}" ${type==='number'?'step="any" min="0"':''}></div>`;
+  layer.innerHTML=`<form class="modal" autocomplete="off">
+    <div class="mhead"><h3>${creating?'Novo concurso':'Editar concurso'}</h3><button type="button" class="btn ghost sm" data-cancel>✕</button></div>
+    <div class="mbody">
+      <fieldset><legend>Identificação</legend><div class="fg">
+        ${inp('nome','Nome do concurso *','s6','text','Ex.: SP Águas 2026')}
+        ${inp('orgao','Órgão','', 'text','Ex.: Agência de Águas do Estado de SP')}
+        ${inp('banca','Banca','', 'text','FGV, Cebraspe, Vunesp…')}
+        ${inp('cargo','Cargo')}${inp('enfase','Ênfase / área')}
+        <div class="f s2"><label>Status</label><select name="status">${STATUS.map(s=>`<option value="${s.k}" ${s.k===c.status?'selected':''}>${s.l}</option>`).join('')}</select></div>
+        <div class="f s2"><label>Prioridade</label><select name="prioridade">${Object.entries(PRIOR).map(([k,l])=>`<option value="${k}" ${k===c.prioridade?'selected':''}>${l}</option>`).join('')}</select></div>
+        <div class="f s2"><label>Cor</label><div class="colors">${CORES.map(x=>`<button type="button" class="sw ${x===c.cor?'on':''}" data-color="${x}" style="background:${x}"></button>`).join('')}</div></div>
+      </div></fieldset>
+      <fieldset><legend>Vaga e remuneração</legend><div class="fg">
+        ${inp('salario','Salário inicial (R$)','s2','number')}${inp('vagas','Vagas (no seu cargo)','s2','number')}${inp('vagasTotal','Vagas no concurso','s2','number')}
+        ${inp('beneficios','Benefícios','', 'text','Vale-refeição, auxílios…')}${inp('requisitos','Requisito','', 'text','Superior em qualquer área…')}
+        ${inp('regime','Regime','s2','text','Estatutário / CLT')}${inp('jornada','Jornada','s2','text','40h')}
+        <div class="f s2"><label>Cadastro reserva</label><select name="cadastroReserva"><option value="false" ${!c.cadastroReserva?'selected':''}>Não</option><option value="true" ${c.cadastroReserva?'selected':''}>Sim</option></select></div>
+        ${inp('lotacao','Lotação')}${inp('localProva','Local da prova')}
+        ${inp('taxa','Taxa de inscrição (R$)','s2','number')}${inp('validade','Validade','s2','text','2 anos + 2')}<div class="f s2"></div>
+        ${inp('link','Link da página do concurso','', 'url','https://')}${inp('linkEdital','Link do edital','', 'url','https://')}
+      </div></fieldset>
+      <fieldset><legend>Cronograma</legend>
+        <div class="hint" style="margin-bottom:8px">Use “fim” para períodos (inscrições, envio de títulos). O tipo “Prova” alimenta a contagem regressiva.</div>
+        <div id="evRows"></div><button type="button" class="btn sm" data-addrow="ev">＋ Data</button></fieldset>
+      <fieldset><legend>Etapas e regras da prova</legend><div id="etRows"></div><button type="button" class="btn sm" data-addrow="et">＋ Etapa</button></fieldset>
+      <fieldset><legend>Matérias</legend><div class="hint" style="margin-bottom:8px">O grupo serve para separar, ex.: “Conhecimentos gerais (20 q)”.</div><div id="mtRows"></div><button type="button" class="btn sm" data-addrow="mt">＋ Matéria</button></fieldset>
+      <fieldset><legend>Anotações</legend><div class="f s6"><textarea name="notas" rows="4">${esc(c.notas||'')}</textarea></div></fieldset>
+    </div>
+    <div class="mfoot"><button type="button" class="btn" data-cancel>Cancelar</button><button type="submit" class="btn primary">Salvar</button></div>
+  </form>`;
+  document.body.appendChild(layer);
+  const form=layer.querySelector('form');
+  const rows={ev:c.eventos.map(clone), et:c.etapas.map(clone), mt:c.materias.map(clone)};
+  function sync(){ // read current row inputs back into rows
+    form.querySelectorAll('[data-r]').forEach(el=>{ const [kind,i,key]=el.dataset.r.split('|'); if(rows[kind][i]) rows[kind][i][key]=el.value }) }
+  function drawRows(){
+    form.querySelector('#evRows').innerHTML=rows.ev.map((e,i)=>`<div class="lr ev"><input data-r="ev|${i}|titulo" value="${esc(e.titulo)}" placeholder="O quê (ex.: Inscrições)"><input type="date" data-r="ev|${i}|inicio" value="${esc(e.inicio)}" title="Início / data"><input type="date" data-r="ev|${i}|fim" value="${esc(e.fim||'')}" title="Fim (opcional)"><select data-r="ev|${i}|tipo">${TIPOS.map(t=>`<option value="${t.k}" ${t.k===e.tipo?'selected':''}>${t.l}</option>`).join('')}</select><button type="button" class="x" data-del="ev|${i}">×</button></div>`).join('');
+    form.querySelector('#etRows').innerHTML=rows.et.map((e,i)=>`<div class="lr et"><input data-r="et|${i}|nome" value="${esc(e.nome)}" placeholder="Etapa (ex.: Prova objetiva)"><input data-r="et|${i}|detalhe" value="${esc(e.detalhe||'')}" placeholder="Questões, nota mínima, peso…"><button type="button" class="x" data-del="et|${i}">×</button></div>`).join('');
+    form.querySelector('#mtRows').innerHTML=rows.mt.map((e,i)=>`<div class="lr mt"><input data-r="mt|${i}|nome" value="${esc(e.nome)}" placeholder="Matéria"><input data-r="mt|${i}|grupo" value="${esc(e.grupo||'')}" placeholder="Grupo"><button type="button" class="x" data-del="mt|${i}">×</button></div>`).join('');
+  }
+  drawRows();
+  form.addEventListener('click',e=>{
+    const add=e.target.closest('[data-addrow]'), del=e.target.closest('[data-del]'), col=e.target.closest('[data-color]');
+    if(add){ sync(); const k=add.dataset.addrow; rows[k].push(k==='ev'?{titulo:'',inicio:'',fim:'',tipo:'outro',feito:false}:k==='et'?{nome:'',detalhe:''}:{nome:'',grupo:rows.mt.length?rows.mt[rows.mt.length-1].grupo:'',progresso:0}); drawRows(); const last=form.querySelectorAll(`#${k}Rows .lr`); last[last.length-1]?.querySelector('input')?.focus() }
+    if(del){ sync(); const [k,i]=del.dataset.del.split('|'); rows[k].splice(+i,1); drawRows() }
+    if(col){ c.cor=col.dataset.color; form.querySelectorAll('.sw').forEach(s=>s.classList.toggle('on',s===col)) }
+  });
+  const close=()=>layer.remove();
+  layer.querySelectorAll('[data-cancel]').forEach(b=>b.onclick=close);
+  layer.addEventListener('mousedown',e=>{ if(e.target===layer) close() });
+  form.onsubmit=async e=>{ e.preventDefault(); sync();
+    const fd=new FormData(form); const out=clone(c);
+    ['nome','orgao','banca','cargo','enfase','beneficios','requisitos','regime','jornada','lotacao','localProva','validade','link','linkEdital','status','prioridade','notas'].forEach(k=>out[k]=String(fd.get(k)||'').trim());
+    ['salario','vagas','vagasTotal','taxa'].forEach(k=>{ const v=fd.get(k); out[k]= v===''||v==null ? '' : Number(v) });
+    out.cadastroReserva = fd.get('cadastroReserva')==='true';
+    if(!out.nome){ form.querySelector('[name=nome]').focus(); toast('Dê um nome ao concurso'); return }
+    out.eventos=rows.ev.filter(x=>x.titulo.trim()||x.inicio).map(x=>({...x,titulo:x.titulo.trim()||tp(x.tipo).l, fim:x.fim||'', feito:!!x.feito}));
+    out.etapas=rows.et.filter(x=>x.nome.trim());
+    out.materias=rows.mt.filter(x=>x.nome.trim()).map(x=>({...x,progresso:Number(x.progresso)||0}));
+    if(!out.criado) out.criado=new Date().toISOString();
+    close(); saveItem(out); openId=out.id; render(); toast(creating?'Concurso adicionado':'Alterações salvas');
+  };
+  setTimeout(()=>form.querySelector('[name=nome]').focus(),50);
+}
+
+// ---------- data import/export ----------
+function openData(){
+  const layer=document.createElement('div'); layer.className='ovl center'; layer.style.zIndex=60;
+  const json=JSON.stringify(items.map(x=>x),null,2);
+  layer.innerHTML=`<div class="modal"><div class="mhead"><h3>Exportar / importar</h3><button class="btn ghost sm" data-c>✕</button></div>
+   <div class="mbody"><p class="hint" style="margin:0">Copie o JSON abaixo como backup, ou cole um JSON (lista de concursos) e clique em Importar. Concursos com o mesmo id são atualizados.</p>
+   <textarea class="notes" id="jsonTa" style="min-height:320px;font-family:ui-monospace,monospace;font-size:12px">${esc(json)}</textarea></div>
+   <div class="mfoot"><button class="btn" id="bkp">Baixar backup (.json)</button><button class="btn" id="cpy">Copiar</button><button class="btn primary" id="imp">Importar</button></div></div>`;
+  document.body.appendChild(layer);
+  const close=()=>layer.remove();
+  layer.querySelector('[data-c]').onclick=close; layer.addEventListener('mousedown',e=>{ if(e.target===layer) close() });
+  layer.querySelector('#cpy').onclick=async()=>{ try{ await navigator.clipboard.writeText(layer.querySelector('#jsonTa').value); toast('Copiado') }catch(e){ layer.querySelector('#jsonTa').select(); toast('Selecionado — use Ctrl+C') } };
+  layer.querySelector('#bkp').onclick=async()=>{ const txt=JSON.stringify({perfil, concursos:items},null,2);
+    try{ const dl=window.claude&&claude.use?await claude.use('downloads'):null;
+      if(dl){ await dl.save({filename:'concursos-backup.json', data:txt}); toast('Backup salvo'); return } }catch(e){ if(e&&e.code==='declined') return }
+    try{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([txt],{type:'application/json'})); a.download='concursos-backup.json'; document.body.appendChild(a); a.click(); a.remove(); toast('Backup salvo') }catch(e){ toast('Não foi possível baixar') } };
+  layer.querySelector('#imp').onclick=async()=>{ let arr; try{ arr=JSON.parse(layer.querySelector('#jsonTa').value) }catch(e){ toast('JSON inválido'); return }
+    if(arr&&!Array.isArray(arr)&&Array.isArray(arr.concursos)){ if(arr.perfil&&arr.perfil.casa){ perfil=arr.perfil; try{ store.saveConfig(perfil) }catch(e){} } arr=arr.concursos }
+    if(!Array.isArray(arr)) arr=[arr]; let n=0;
+    for(const x of arr){ if(!x||typeof x!=='object'||!x.nome) continue; const o=clone(x); o.id=String(o.id||('c-'+uid())).replace(/[^A-Za-z0-9_\-.~:@+]/g,'-'); await saveItem(o); n++ }
+    close(); toast(n+' concurso(s) importado(s)') };
+}
+
+// ---------- events ----------
+document.addEventListener('click',e=>{
+  const tab=e.target.closest('.tab'); if(tab){ view=tab.dataset.v; render(); return }
+  if(e.target.closest('#layer')) return;
+  const op=e.target.closest('[data-open]'); if(op){ openDrawer(op.dataset.open); return }
+  const f=e.target.closest('[data-filter]'); if(f){ filterStatus=f.dataset.filter; render(); return }
+  const cal=e.target.closest('[data-cal]'); if(cal){ const d=+cal.dataset.cal; if(d===0){calCursor=new Date();calCursor.setDate(1)} else calCursor.setMonth(calCursor.getMonth()+d); render(); return }
+  const act=e.target.closest('[data-act=add]'); if(act){ openForm(); return }
+  const ml=e.target.closest('[data-mloc]'); if(ml){ const [cid,i]=ml.dataset.mloc.split('|'); mapSel={cid,i:+i}; const c=items.find(x=>x.id===cid); if(c) focusLocal(c,+i,ml.classList.contains('minerow')); render(); return }
+  const mo=e.target.closest('[data-mopen]'); if(mo){ openDrawer(mo.dataset.mopen); return }
+  const md=e.target.closest('[data-mdel]'); if(md){ const [cid,i]=md.dataset.mdel.split('|'); const c=items.find(x=>x.id===cid); if(c){ const n=clone(c); n.locais.splice(+i,1); mapSel=null; saveItem(n); toast('Local removido') } return }
+  const cs=e.target.closest('[data-csel]'); if(cs){ contSel=cs.dataset.csel; render(); return }
+  const bk=e.target.closest('[data-blk]'); if(bk){ const k=bk.dataset.blk; openBlocks.has(k)?openBlocks.delete(k):openBlocks.add(k); render(); return }
+  const ce=e.target.closest('[data-cedit]'); if(ce){ openContEditor(); return }
+  const cx=e.target.closest('[data-cexp]'); if(cx){ const c=items.find(x=>x.id===contSel); (c&&c.conteudo||[]).forEach((b,i)=>{ const k=c.id+'|'+i; cx.dataset.cexp==='1'?openBlocks.add(k):openBlocks.delete(k) }); render(); return }
+});
+document.addEventListener('change',e=>{
+  if(e.target.id==='sortSel'){ sortBy=e.target.value; render() }
+  if(e.target.id==='pastChk'){ agendaPast=e.target.checked; render() }
+  if(e.target.id==='contPend'){ contPend=e.target.checked; render() }
+  if(e.target.id==='contRefs'){ contRefs=e.target.checked; render() }
+  if(e.target.id==='mOnly'){ mapOnlyMine=e.target.checked; render() }
+  if(e.target.dataset && e.target.dataset.mvis){ const id=e.target.dataset.mvis; e.target.checked?mapHidden.delete(id):mapHidden.add(id); render() }
+  if(e.target.dataset && e.target.dataset.tchk && !e.target.closest('#layer')){ const [bi,ti]=e.target.dataset.tchk.split('|').map(Number); toggleTopic(bi,ti,e.target.checked) }
+});
+document.addEventListener('input',e=>{ if(e.target.id==='contSearch'){ contQuery=e.target.value; const pos=e.target.selectionStart; render(); const s=$('#contSearch'); if(s){ s.focus(); s.setSelectionRange(pos,pos) } } });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ const top=[...document.querySelectorAll('body > .ovl')].pop(); if(top) top.remove(); else if(openId) closeLayer() } });
+$('#btnAdd').onclick=()=>openForm();
+$('#btnData').onclick=openData;
+$('#btnConta').onclick=()=>openGate(false);
+const _r=render; render=function(){ _r(); const s=$('#sortSel'); if(s) s.value=sortBy };
+
+// ---------- boot ----------
+render();
+(async()=>{
+  let db=null;
+  for(let i=0;i<3 && !(window.claude && typeof window.claude.use==='function');i++) await new Promise(r=>setTimeout(r,100));
+  try{ db = window.claude && typeof window.claude.use==='function' ? await window.claude.use('db') : null }catch(e){ db=null }
+  if(db){ store=dbStore(db) }
+  else if(ghCfg()){ store=ghStore(ghCfg()) }
+  else if(location.protocol.startsWith('http')&&!/^(localhost|127\.)/.test(location.hostname)){ store=localStore0(); openGate() }
+  else { store=localStore(); (()=>{ try{ if(!sessionStorage.getItem('pc-banner')){ setBanner('Suas alterações ficam salvas neste navegador. Use <b>Dados → Baixar backup</b> de vez em quando e guarde o arquivo em <code>data/concursos.json</code> no repositório.'); sessionStorage.setItem('pc-banner','1') } }catch(e){} })() }
+})();
+})();
+
+document.addEventListener('click',async e=>{ const b=e.target.closest&&e.target.closest('[data-dl]'); if(!b) return; e.preventDefault(); e.stopPropagation();
+  let step='abrir o download';
+  const plain=()=>{ const a=document.createElement('a'); a.href=b.dataset.dl.replace(/_docx\.b64\.txt$/,'.docx'); a.download=b.dataset.fn; document.body.appendChild(a); a.click(); a.remove() };
+  if(store&&store.mode==='github'){ try{ const path=b.dataset.dl.replace(/_docx\.b64\.txt$/,'.docx'); toast('Baixando…'); const r=await ghReq(store.cfg,path,{raw:true}); if(!r.ok) throw new Error('HTTP '+r.status); const blob=await r.blob(); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=b.dataset.fn; document.body.appendChild(a); a.click(); a.remove() }catch(err){ toast('Não foi possível baixar ('+err.message+')') } return }
+  if(!(window.claude&&typeof claude.use==='function')){ plain(); return }
+  try{ const dl=await claude.use('downloads'); if(!dl){ plain(); return }
+    step='carregar o arquivo';
+    const r=await fetch(new URL(b.dataset.dl, location.href)); if(!r.ok) throw {message:'HTTP '+r.status};
+    let data;
+    if(/\.b64\.txt$/.test(b.dataset.dl)){ const t=(await r.text()).trim(); const bin=atob(t); const u=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i); data=u; }
+    else data=await r.blob();
+    step='salvar';
+    await dl.save({filename:b.dataset.fn, data}); toast('Arquivo salvo'); }
+  catch(err){ if(err&&err.code==='declined') return; toast('Não foi possível '+step+(err&&(err.code||err.message)?' ('+(err.code||err.message)+')':'')) } }, true);
+</script>
+</body>
+</html>
